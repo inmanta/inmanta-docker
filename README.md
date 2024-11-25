@@ -34,6 +34,8 @@ sudo docker compose -f docker-compose.yml -f docker.compose.ssh.override.yml dow
 
 ## Deploy the service orchestrator
 
+:warning: **Prior to deploying the service orchestrator, you must setup access to the private container registry and place the license and entitlement files in the license folder.**
+
 ```
 # Latest iso release
 export INMANTA_ORCHESTRATOR_IMAGE=containers.inmanta.com/containers/service-orchestrator:8
@@ -49,6 +51,8 @@ sudo docker compose -f docker-compose.yml -f docker.compose.iso.override.yml dow
 ```
 
 ## Deploy the service orchestrator with an ssh sidecar
+
+:warning: **Prior to deploying the service orchestrator, you must setup access to the private container registry and place the license and entitlement files in the license folder.**
 
 ```
 # Latest iso release
