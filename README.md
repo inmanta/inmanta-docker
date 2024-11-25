@@ -2,7 +2,7 @@
 
 ## Configuration
 
-The examples of orchestrator setup using docker referenced below
+The examples of orchestrator setup using docker referenced below can be configured using some environment variables, they are documented in the table below.  The environment variables are to be provided to docker compose itself, they are not exposed directly to the processes running inside the containers.
 
 | **Name** | **Default** | **Description** |
 | --- | --- | --- |
