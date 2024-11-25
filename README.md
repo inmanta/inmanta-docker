@@ -1,5 +1,16 @@
 # inmanta-docker
 
+## Configuration
+
+The examples of orchestrator setup using docker referenced below
+
+| **Name** | **Default** | **Description** |
+| --- | --- | --- |
+| `INMANTA_ORCHESTRATOR_IMAGE` | / | **Required** This environment variable specifies which container image the orchestrator (and ssh sidecar) should use. |
+| `POSTGRESQL_VERSION` | `14` | The postgresql version for the db container, the version should match the one required by the orchestrator version in use. |
+| `INMANTA_AUTHORIZED_KEYS` | / | The public keys to insert into the ssh sidecar authorized keys for the inmanta user. |
+
+
 ## Deploy the oss orchestrator
 
 ```
@@ -18,9 +29,14 @@ sudo docker compose down -v
 
 ## Deploy the oss orchestrator with an ssh sidecar
 
+:bulb: **To give access to your used in the ssh sidecar, you must provide some public key that will be installed in the container.  You can do this using the INMANTA_AUTHORIZED_KEYS environment variable.**
+
 ```
 # Latest oss release
 export INMANTA_ORCHESTRATOR_IMAGE=ghcr.io/inmanta/orchestrator:latest
+
+# Your own public, new-line separated, key(s)
+export INMANTA_AUTHORIZED_KEYS="ssh-rsa ..."
 
 # Start db, orchestrator and ssh sidecar
 sudo docker compose -f docker-compose.yml -f docker.compose.ssh.override.yml up -d
@@ -54,9 +70,14 @@ sudo docker compose -f docker-compose.yml -f docker.compose.iso.override.yml dow
 
 :warning: **Prior to deploying the service orchestrator, you must setup access to the private container registry and place the license and entitlement files in the license folder.**
 
+:bulb: **To give access to your used in the ssh sidecar, you must provide some public key that will be installed in the container.  You can do this using the INMANTA_AUTHORIZED_KEYS environment variable.**
+
 ```
 # Latest iso release
 export INMANTA_ORCHESTRATOR_IMAGE=containers.inmanta.com/containers/service-orchestrator:8
+
+# Your own public, new-line separated, key(s)
+export INMANTA_AUTHORIZED_KEYS="ssh-rsa ..."
 
 # Start db, orchestrator and ssh sidecar
 sudo docker compose -f docker-compose.yml -f docker.compose.iso.override.yml -f docker-compose.ssh.override.yml up -d
