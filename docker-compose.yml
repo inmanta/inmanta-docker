@@ -1,0 +1,53 @@
+services:
+  db:
+    image: "docker.io/library/postgres:${POSTGRESQL_VERSION:-14}"
+    pull_policy: always
+    environment:
+      POSTGRES_USER: inmanta
+      POSTGRES_PASSWORD: inmanta
+    volumes:
+      - inmanta-db-data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U inmanta"]
+      interval: 10s
+      retries: 5
+      start_period: 10s
+      timeout: 10s
+    networks:
+      mgmt:
+        ipv4_address: 172.20.0.2
+
+  server:
+    image: "${INMANTA_ORCHESTRATOR_IMAGE:?error}"
+    pull_policy: always
+    environment:
+      INMANTA_DATABASE_HOST: 172.20.0.2
+      INMANTA_DATABASE_USERNAME: inmanta
+      INMANTA_DATABASE_PASSWORD: inmanta
+    healthcheck:
+      test: ["CMD-SHELL", "curl http://$${INMANTA_SERVER_BIND_ADDRESS}:$${INMANTA_SERVER_BIND_PORT}/api/v1/serverstatus"]
+      interval: 10s
+      retries: 5
+      start_period: 30s
+      timeout: 10s
+    volumes:
+      - inmanta-server-data:/var/lib/inmanta
+      - inmanta-server-logs:/var/log/inmanta
+    depends_on:
+      db:
+        condition: service_healthy
+    networks:
+      mgmt:
+        ipv4_address: 172.20.0.3
+
+volumes:
+  inmanta-db-data: {}
+  inmanta-server-data: {}
+  inmanta-server-logs: {}
+
+networks:
+  mgmt:
+    ipam:
+      config:
+        - subnet: 172.20.0.0/28
+          gateway: 172.20.0.1
