@@ -35,7 +35,7 @@ sudo docker compose down -v
 # Latest oss release
 export INMANTA_ORCHESTRATOR_IMAGE=ghcr.io/inmanta/orchestrator:latest
 
-# Your own public, new-line separated, key(s)
+# Your own, new-line separated, public key(s)
 export INMANTA_AUTHORIZED_KEYS="ssh-rsa ..."
 
 # Start db, orchestrator and ssh sidecar
@@ -76,7 +76,7 @@ sudo docker compose -f docker-compose.yml -f docker.compose.iso.override.yml dow
 # Latest iso release
 export INMANTA_ORCHESTRATOR_IMAGE=containers.inmanta.com/containers/service-orchestrator:8
 
-# Your own public, new-line separated, key(s)
+# Your own, new-line separated, public key(s)
 export INMANTA_AUTHORIZED_KEYS="ssh-rsa ..."
 
 # Start db, orchestrator and ssh sidecar
