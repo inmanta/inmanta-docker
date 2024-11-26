@@ -13,10 +13,19 @@ INMANTA_USER_AUTHORIZED_KEYS="${INMANTA_AUTHORIZED_KEYS}"
 
 
 ## SETUP ##
-# Configure inmanta cli, persist any of the provided environment variables
-# in the user profile file
+# Make sure that any environment variable prefixed with INMANTA which is available
+# to the container, will also be available to the inmanta user when login in
 INMANTA_USER_HOME_DIR=$(getent passwd inmanta | cut -d: -f6)
-export | grep INMANTA >> "${INMANTA_USER_HOME_DIR}/.profile"
+INMANTA_ENV_FILE="${INMANTA_USER_HOME_DIR}/.inmanta_env"
+INMANTA_PROFILE="${INMANTA_USER_HOME_DIR}/.profile"
+LOAD_ENV=". $INMANTA_ENV_FILE"
+
+# Overwrite environment variables in dedicated file
+export | grep INMANTA > $INMANTA_ENV_FILE
+
+# Make sure to load environment variables when login in
+touch $INMANTA_PROFILE
+grep -e "$LOAD_ENV" "$INMANTA_PROFILE" || echo $LOAD_ENV >> "$INMANTA_PROFILE"
 
 # Configure ssh server
 apt-get install -y openssh-server
