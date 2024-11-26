@@ -1,5 +1,7 @@
 # inmanta-docker
 
+This repo contains some example of docker based orchestrator deployments.  We illustrate here how to deploy both the open-source and the commercial edition, with or without an ssh sidecar (for ssh access to part of the orchestrator file system).
+
 ## Configuration
 
 The examples of orchestrator setup using docker referenced below can be configured using some environment variables, they are documented in the table below.  The environment variables are to be provided to docker compose itself, they are not exposed directly to the processes running inside the containers.
@@ -13,7 +15,7 @@ The examples of orchestrator setup using docker referenced below can be configur
 
 ## Deploy the oss orchestrator
 
-```
+```bash
 # Latest oss release
 export INMANTA_ORCHESTRATOR_IMAGE=ghcr.io/inmanta/orchestrator:latest
 
@@ -31,7 +33,7 @@ sudo docker compose down -v
 
 :bulb: **To give access to your used in the ssh sidecar, you must provide some public key that will be installed in the container.  You can do this using the INMANTA_AUTHORIZED_KEYS environment variable.**
 
-```
+```bash
 # Latest oss release
 export INMANTA_ORCHESTRATOR_IMAGE=ghcr.io/inmanta/orchestrator:latest
 
@@ -52,7 +54,7 @@ sudo docker compose -f docker-compose.yml -f docker.compose.ssh.override.yml dow
 
 :warning: **Prior to deploying the service orchestrator, you must setup access to the private container registry and place the license and entitlement files in the license folder.**
 
-```
+```bash
 # Latest iso release
 export INMANTA_ORCHESTRATOR_IMAGE=containers.inmanta.com/containers/service-orchestrator:8
 
@@ -72,7 +74,7 @@ sudo docker compose -f docker-compose.yml -f docker.compose.iso.override.yml dow
 
 :bulb: **To give access to your used in the ssh sidecar, you must provide some public key that will be installed in the container.  You can do this using the INMANTA_AUTHORIZED_KEYS environment variable.**
 
-```
+```bash
 # Latest iso release
 export INMANTA_ORCHESTRATOR_IMAGE=containers.inmanta.com/containers/service-orchestrator:8
 
