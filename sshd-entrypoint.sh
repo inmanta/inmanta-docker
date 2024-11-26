@@ -18,14 +18,14 @@ INMANTA_USER_AUTHORIZED_KEYS="${INMANTA_AUTHORIZED_KEYS}"
 INMANTA_USER_HOME_DIR=$(getent passwd inmanta | cut -d: -f6)
 INMANTA_ENV_FILE="${INMANTA_USER_HOME_DIR}/.inmanta_env"
 INMANTA_PROFILE="${INMANTA_USER_HOME_DIR}/.profile"
-LOAD_ENV=". $INMANTA_ENV_FILE"
+LOAD_ENV_CMD=". $INMANTA_ENV_FILE"
 
 # Overwrite environment variables in dedicated file
 export | grep INMANTA > $INMANTA_ENV_FILE
 
 # Make sure to load environment variables when login in
 touch $INMANTA_PROFILE
-grep -e "$LOAD_ENV" "$INMANTA_PROFILE" || echo $LOAD_ENV >> "$INMANTA_PROFILE"
+grep -e "$LOAD_ENV_CMD" "$INMANTA_PROFILE" || echo "$LOAD_ENV_CMD" >> "$INMANTA_PROFILE"
 
 # Configure ssh server
 apt-get install -y openssh-server
