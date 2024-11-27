@@ -1,0 +1,13 @@
+services:
+  server:
+    image: "${INMANTA_ORCHESTRATOR_IMAGE:?error}"
+    environment:
+      INMANTA_DATABASE_HOST: 172.20.0.2
+      INMANTA_DATABASE_USERNAME: inmanta
+      INMANTA_DATABASE_PASSWORD: inmanta
+      INMANTA_LICENSE_ENTITLEMENT_FILE: "/etc/inmanta/license/example.com.jwe"
+      INMANTA_LICENSE_LICENSE_KEY: "/etc/inmanta/license/example.com.license"
+    volumes:
+      - ./license:/etc/inmanta/license
+      - inmanta-server-data:/var/lib/inmanta
+      - inmanta-server-logs:/var/log/inmanta
