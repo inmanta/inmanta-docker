@@ -1,0 +1,22 @@
+services:
+  logrotate:
+    image: "${INMANTA_ORCHESTRATOR_IMAGE:?error}"
+    pull_policy: always
+    entrypoint: ["/logrotate-entrypoint.sh"]
+    user: "root:root"
+    healthcheck:
+      test: ["CMD-SHELL", "grep inmanta /var/lib/logrotate/status"]
+      interval: 1h
+      retries: 5
+      start_period: 24h
+      timeout: 10s
+    volumes:
+      - ./logrotate-entrypoint.sh:/logrotate-entrypoint.sh
+      - inmanta-server-logs:/var/log/inmanta
+      - inmanta-logrotate-data:/var/lib/logrotate
+    networks:
+      mgmt:
+        ipv4_address: 172.20.0.5
+
+volumes:
+  inmanta-logrotate-data: {}
