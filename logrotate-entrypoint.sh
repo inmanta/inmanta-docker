@@ -10,7 +10,7 @@ set -e
 apt-get install -y cron logrotate
 if [ ! -f /etc/logrotate.d/inmanta ]; then
     cat > /etc/logrotate.d/inmanta <<EOF
-/var/log/inmanta/*.log /var/log/inmanta/*.out /var/log/inmanta/*.err {
+$INMANTA_CONFIG_LOG_DIR/*.log $INMANTA_CONFIG_LOG_DIR/*.out $INMANTA_CONFIG_LOG_DIR/*.err {
 	daily
 	compress
 	rotate 10
