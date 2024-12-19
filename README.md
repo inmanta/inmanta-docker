@@ -6,15 +6,15 @@ This repo contains some example of docker based orchestrator deployments.  We il
 
 The examples of orchestrator setup using docker referenced below can be configured using some environment variables, they are documented in the table below.  The environment variables are to be provided to docker compose itself, they are not exposed directly to the processes running inside the containers.
 
-| **Name** | **Default** | **Description** |
-| --- | --- | --- |
-| `INMANTA_ORCHESTRATOR_IMAGE` | / | **Required** This environment variable specifies which container image the orchestrator (and ssh sidecar) should use. |
-| `INMANTA_ORCHESTRATOR_IP` | `127.0.0.1` | This environment variable specifies on which ip of the **host** the orchestrator api should be made available. |
-| `INMANTA_ORCHESTRATOR_PORT` | `8888` | This environment variable specifies on which port of the **host** the orchestrator api should be made available. |
-| `POSTGRESQL_VERSION` | `16` | The postgresql version for the db container, the version should match the one required by the orchestrator version in use. |
-| `INMANTA_AUTHORIZED_KEYS` | / | The public keys to insert into the ssh sidecar authorized keys for the inmanta user. |
-| `INMANTA_SSH_SIDECAR_IP` | `127.0.0.1` | This environment variable specifies on which ip of the **host** the ssh sidecar should be made available. |
-| `INMANTA_SSH_SIDECAR_PORT` | `2222` | This environment variable specifies on which port of the **host** the ssh sidecar should be made available. |
+| **Name** | **Default** | **Used by** | **Description** |
+| --- | --- | --- | --- |
+| `INMANTA_ORCHESTRATOR_IMAGE` | / | all | **Required** This environment variable specifies which container image the orchestrator (and ssh sidecar) should use. |
+| `INMANTA_ORCHESTRATOR_IP` | `127.0.0.1` | `docker-compose.yml` | This environment variable specifies on which ip of the **host** the orchestrator api should be made available. |
+| `INMANTA_ORCHESTRATOR_PORT` | `8888` | `docker-compose.yml` | This environment variable specifies on which port of the **host** the orchestrator api should be made available. |
+| `POSTGRESQL_VERSION` | `16` | `docker-compose.yml` | The postgresql version for the db container, the version should match the one required by the orchestrator version in use. |
+| `INMANTA_AUTHORIZED_KEYS` | / | `docker-compose.ssh.override.yml` | The public keys to insert into the ssh sidecar authorized keys for the inmanta user. |
+| `INMANTA_SSH_SIDECAR_IP` | `127.0.0.1` | `docker-compose.ssh.override.yml` | This environment variable specifies on which ip of the **host** the ssh sidecar should be made available. |
+| `INMANTA_SSH_SIDECAR_PORT` | `2222` | `docker-compose.ssh.override.yml` | This environment variable specifies on which port of the **host** the ssh sidecar should be made available. |
 
 ## Composability
 
