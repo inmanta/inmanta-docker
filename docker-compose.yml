@@ -1,6 +1,7 @@
 services:
   db:
-    image: "docker.io/library/postgres:${POSTGRESQL_VERSION:-14}"
+    image: "docker.io/library/postgres:${POSTGRESQL_VERSION:-16}"
+    container_name: inmanta-db
     pull_policy: always
     environment:
       POSTGRES_USER: inmanta
@@ -13,15 +14,15 @@ services:
       retries: 5
       start_period: 10s
       timeout: 10s
-    networks:
-      mgmt:
-        ipv4_address: 172.20.0.2
 
   server:
     image: "${INMANTA_ORCHESTRATOR_IMAGE:?error}"
+    container_name: inmanta-orchestrator
     pull_policy: always
+    ports:
+      - 127.0.0.1:8888:8888
     environment:
-      INMANTA_DATABASE_HOST: 172.20.0.2
+      INMANTA_DATABASE_HOST: inmanta-db
       INMANTA_DATABASE_USERNAME: inmanta
       INMANTA_DATABASE_PASSWORD: inmanta
     volumes:
@@ -30,18 +31,8 @@ services:
     depends_on:
       db:
         condition: service_healthy
-    networks:
-      mgmt:
-        ipv4_address: 172.20.0.3
 
 volumes:
   inmanta-db-data: {}
   inmanta-server-data: {}
   inmanta-server-logs: {}
-
-networks:
-  mgmt:
-    ipam:
-      config:
-        - subnet: 172.20.0.0/28
-          gateway: 172.20.0.1

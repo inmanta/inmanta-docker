@@ -1,12 +1,13 @@
 services:
   ssh-sidecar:
     image: "${INMANTA_ORCHESTRATOR_IMAGE:?error}"
+    container_name: inmanta-ssh-sidecar
     pull_policy: always
     entrypoint: ["/sshd-entrypoint.sh"]
     environment:
-      INMANTA_CMDLINE_REST_TRANSPORT_HOST: 172.20.0.3
-      INMANTA_COMPILER_REST_TRANSPORT_HOST: 172.20.0.3
-      INMANTA_CLIENT_REST_TRANSPORT_HOST: 172.20.0.3
+      INMANTA_CMDLINE_REST_TRANSPORT_HOST: inmanta-orchestrator
+      INMANTA_COMPILER_REST_TRANSPORT_HOST: inmanta-orchestrator
+      INMANTA_CLIENT_REST_TRANSPORT_HOST: inmanta-orchestrator
       INMANTA_AUTHORIZED_KEYS: "${INMANTA_AUTHORIZED_KEYS}"
     user: "root:root"
     healthcheck:
@@ -19,6 +20,3 @@ services:
       - ./sshd-entrypoint.sh:/sshd-entrypoint.sh
       - inmanta-server-data:/var/lib/inmanta
       - inmanta-server-logs:/var/log/inmanta
-    networks:
-      mgmt:
-        ipv4_address: 172.20.0.4

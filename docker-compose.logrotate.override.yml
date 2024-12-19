@@ -1,6 +1,7 @@
 services:
   logrotate:
     image: "${INMANTA_ORCHESTRATOR_IMAGE:?error}"
+    container_name: inmanta-logrotate-sidecar
     pull_policy: always
     entrypoint: ["/logrotate-entrypoint.sh"]
     user: "root:root"
@@ -14,9 +15,6 @@ services:
       - ./logrotate-entrypoint.sh:/logrotate-entrypoint.sh
       - inmanta-server-logs:/var/log/inmanta
       - inmanta-logrotate-data:/var/lib/logrotate
-    networks:
-      mgmt:
-        ipv4_address: 172.20.0.5
 
 volumes:
   inmanta-logrotate-data: {}
