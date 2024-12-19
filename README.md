@@ -72,7 +72,7 @@ sudo docker compose -f docker-compose.yml -f docker-compose.iso.yml down
 sudo docker compose -f docker-compose.yml -f docker-compose.iso.yml down -v
 ```
 
-## Deploy the orchestrator with an ssh sidecar
+### Deploy the orchestrator with an ssh sidecar
 
 :warning: **To give access to your used in the ssh sidecar, you must provide some public key that will be installed in the container.  You can do this using the INMANTA_AUTHORIZED_KEYS environment variable.**
 
@@ -110,7 +110,7 @@ sudo docker compose -f docker-compose.yml -f docker-compose.ssh.yml down -v
 > ssh -p "${INMANTA_SSH_SIDECAR_PORT:-2222}" "inmanta@${INMANTA_SSH_SIDECAR_IP:-127.0.0.1}"
 > ```
 
-## Deploy the orchestrator with a logrotate sidecar
+### Deploy the orchestrator with a logrotate sidecar
 
 :bulb: The health check of the logrotate container may stay in the starting state for a very long time (up to 24h) as it checks that logrotate did run, which happens only once a day.
 
