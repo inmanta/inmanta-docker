@@ -53,7 +53,7 @@ sudo docker compose -f docker-compose.yml down -v
 
 ### Deploy the service orchestrator
 
-:warning: **Prior to deploying the service orchestrator, you must setup access to the private container registry and place the license and entitlement files in the license folder.**
+:warning: **Prior to deploying the service orchestrator, you must setup access to the private container registry and place the license and entitlement files in the license folder.  In this example, these license files should be named `license/example.com.license` and `license/example.com.jwe`.**
 
 ```bash
 # Latest iso release
