@@ -12,45 +12,42 @@ The examples of orchestrator setup using docker referenced below can be configur
 | `POSTGRESQL_VERSION` | `14` | The postgresql version for the db container, the version should match the one required by the orchestrator version in use. |
 | `INMANTA_AUTHORIZED_KEYS` | / | The public keys to insert into the ssh sidecar authorized keys for the inmanta user. |
 
+## Composability
 
-## Deploy the oss orchestrator
+The files in this repo allow to deploy the orchestrator with different topologies.  The desired topology should be composed by passing more or less `docker-compose.*.override.yml` files to docker compose.  The file `docker-compose.yml` should always be provided.
+
+The docker compose commands can be summarized this way:
+```bash
+sudo docker compose \
+    -f docker-compose.yml \
+    [-f docker-compose.iso.override.yml] \ # Deploy service orchestrator instead of oss one
+    [-f docker-compose.ssh.override.yml] \ # Deploy an ssh sidecar to access the orchestrator file system via ssh
+    [-f docker-compose.logrotate.override.yml] \ # Deploy a logrotate sidecar to rotate the logs of the orchestrator
+    <up|down|ps> [options...]
+```
+
+## Examples
+
+### Deploy the oss orchestrator
 
 ```bash
 # Latest oss release
 export INMANTA_ORCHESTRATOR_IMAGE=ghcr.io/inmanta/orchestrator:latest
 
 # Start db and orchestrator
-sudo docker compose up -d
+sudo docker compose -f docker-compose.yml up -d
+
+# Check the containers status
+sudo docker compose -f docker-compose.yml ps -a
 
 # Stop db and orchestrator
-sudo docker compose down
+sudo docker compose -f docker-compose.yml down
 
 # Clear storage or db and orchestrator
-sudo docker compose down -v
+sudo docker compose -f docker-compose.yml down -v
 ```
 
-## Deploy the oss orchestrator with an ssh sidecar
-
-:bulb: **To give access to your used in the ssh sidecar, you must provide some public key that will be installed in the container.  You can do this using the INMANTA_AUTHORIZED_KEYS environment variable.**
-
-```bash
-# Latest oss release
-export INMANTA_ORCHESTRATOR_IMAGE=ghcr.io/inmanta/orchestrator:latest
-
-# Your own, new-line separated, public key(s)
-export INMANTA_AUTHORIZED_KEYS="ssh-rsa ..."
-
-# Start db, orchestrator and ssh sidecar
-sudo docker compose -f docker-compose.yml -f docker.compose.ssh.override.yml up -d
-
-# Stop db, orchestrator and ssh sidecar
-sudo docker compose -f docker-compose.yml -f docker.compose.ssh.override.yml down
-
-# Clear storage or db and orchestrator
-sudo docker compose -f docker-compose.yml -f docker.compose.ssh.override.yml down -v
-```
-
-## Deploy the service orchestrator
+### Deploy the service orchestrator
 
 :warning: **Prior to deploying the service orchestrator, you must setup access to the private container registry and place the license and entitlement files in the license folder.**
 
@@ -59,50 +56,59 @@ sudo docker compose -f docker-compose.yml -f docker.compose.ssh.override.yml dow
 export INMANTA_ORCHESTRATOR_IMAGE=containers.inmanta.com/containers/service-orchestrator:8
 
 # Start db and orchestrator
-sudo docker compose -f docker-compose.yml -f docker.compose.iso.override.yml up -d
+sudo docker compose -f docker-compose.yml -f docker-compose.iso.override.yml up -d
+
+# Check the containers status
+sudo docker compose -f docker-compose.yml -f docker-compose.iso.override.yml ps -a
 
 # Stop db and orchestrator
-sudo docker compose -f docker-compose.yml -f docker.compose.iso.override.yml down
+sudo docker compose -f docker-compose.yml -f docker-compose.iso.override.yml down
 
 # Clear storage or db and orchestrator
-sudo docker compose -f docker-compose.yml -f docker.compose.iso.override.yml down -v
+sudo docker compose -f docker-compose.yml -f docker-compose.iso.override.yml down -v
 ```
 
-## Deploy the service orchestrator with an ssh sidecar
-
-:warning: **Prior to deploying the service orchestrator, you must setup access to the private container registry and place the license and entitlement files in the license folder.**
+## Deploy the orchestrator with an ssh sidecar
 
 :bulb: **To give access to your used in the ssh sidecar, you must provide some public key that will be installed in the container.  You can do this using the INMANTA_AUTHORIZED_KEYS environment variable.**
 
+:bulb: Once deployed, you can figure out the ip of the ssh sidecar by inspecting the ssh sidecar container: `docker inspect inmanta-ssh-sidecar`.  To ssh inside the container, you can then use this one liner: `ssh inmanta@$(docker inspect -f '{{range .NetworkSettings.Networks}}{{print .IPAddress}}{{end}}' inmanta-ssh-sidecar)`.
+
 ```bash
-# Latest iso release
-export INMANTA_ORCHESTRATOR_IMAGE=containers.inmanta.com/containers/service-orchestrator:8
+export INMANTA_ORCHESTRATOR_IMAGE="..."
 
 # Your own, new-line separated, public key(s)
 export INMANTA_AUTHORIZED_KEYS="ssh-rsa ..."
 
 # Start db, orchestrator and ssh sidecar
-sudo docker compose -f docker-compose.yml -f docker.compose.iso.override.yml -f docker-compose.ssh.override.yml up -d
+sudo docker compose -f docker-compose.yml -f docker-compose.ssh.override.yml up -d
+
+# Check the containers status
+sudo docker compose -f docker-compose.yml -f docker-compose.ssh.override.yml ps -a
 
 # Stop db, orchestrator and ssh sidecar
-sudo docker compose -f docker-compose.yml -f docker.compose.iso.override.yml -f docker-compose.ssh.override.yml down
+sudo docker compose -f docker-compose.yml -f docker-compose.ssh.override.yml down
 
 # Clear storage or db and orchestrator
-sudo docker compose -f docker-compose.yml -f docker.compose.iso.override.yml -f docker-compose.ssh.override.yml down -v
+sudo docker compose -f docker-compose.yml -f docker-compose.ssh.override.yml down -v
 ```
 
 ## Deploy the orchestrator with a logrotate sidecar
 
+:bulb: The health check of the logrotate container may stay in the starting state for a very long time (up to 24h) as it checks that logrotate did run, which happens only once a day.
+
 ```bash
-# Latest oss release
-export INMANTA_ORCHESTRATOR_IMAGE=ghcr.io/inmanta/orchestrator:latest
+export INMANTA_ORCHESTRATOR_IMAGE="..."
 
 # Start db, orchestrator and logrotate sidecar
-sudo docker compose -f docker-compose.yml -f docker.compose.logrotate.override.yml up -d
+sudo docker compose -f docker-compose.yml -f docker-compose.logrotate.override.yml up -d
+
+# Check the containers status
+sudo docker compose -f docker-compose.yml -f docker-compose.logrotate.override.yml ps -a
 
 # Stop db, orchestrator and logrotate sidecar
-sudo docker compose -f docker-compose.yml -f docker.compose.logrotate.override.yml down
+sudo docker compose -f docker-compose.yml -f docker-compose.logrotate.override.yml down
 
 # Clear storage of db, orchestrator and logrotate sidecar
-sudo docker compose -f docker-compose.yml -f docker.compose.logrotate.override.yml down -v
+sudo docker compose -f docker-compose.yml -f docker-compose.logrotate.override.yml down -v
 ```
