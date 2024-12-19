@@ -16,21 +16,21 @@ The examples of orchestrator setup using docker referenced below can be configur
 | `INMANTA_ORCHESTRATOR_IP` | `127.0.0.1` | `docker-compose.yml` | This environment variable specifies on which ip of the **host** the orchestrator api should be made available. |
 | `INMANTA_ORCHESTRATOR_PORT` | `8888` | `docker-compose.yml` | This environment variable specifies on which port of the **host** the orchestrator api should be made available. |
 | `POSTGRESQL_VERSION` | `16` | `docker-compose.yml` | The postgresql version for the db container, the version should match the one required by the orchestrator version in use. |
-| `INMANTA_AUTHORIZED_KEYS` | / | `docker-compose.ssh.override.yml` | The public keys to insert into the ssh sidecar authorized keys for the inmanta user. |
-| `INMANTA_SSH_SIDECAR_IP` | `127.0.0.1` | `docker-compose.ssh.override.yml` | This environment variable specifies on which ip of the **host** the ssh sidecar should be made available. |
-| `INMANTA_SSH_SIDECAR_PORT` | `2222` | `docker-compose.ssh.override.yml` | This environment variable specifies on which port of the **host** the ssh sidecar should be made available. |
+| `INMANTA_AUTHORIZED_KEYS` | / | `docker-compose.ssh.yml` | The public keys to insert into the ssh sidecar authorized keys for the inmanta user. |
+| `INMANTA_SSH_SIDECAR_IP` | `127.0.0.1` | `docker-compose.ssh.yml` | This environment variable specifies on which ip of the **host** the ssh sidecar should be made available. |
+| `INMANTA_SSH_SIDECAR_PORT` | `2222` | `docker-compose.ssh.yml` | This environment variable specifies on which port of the **host** the ssh sidecar should be made available. |
 
 ## Composition
 
-The files in this repo allow to deploy the orchestrator with different topologies.  The desired topology should be composed by passing more or less `docker-compose.*.override.yml` files to docker compose.  The file `docker-compose.yml` should always be provided.
+The files in this repo allow to deploy the orchestrator with different topologies.  The desired topology should be composed by passing more or less `docker-compose.*.yml` files to docker compose.  The file `docker-compose.yml` should always be provided.
 
 The docker compose commands can be summarized this way:
 ```bash
 sudo docker compose \
     -f docker-compose.yml \
-    [-f docker-compose.iso.override.yml] \ # Deploy service orchestrator instead of oss one
-    [-f docker-compose.ssh.override.yml] \ # Deploy an ssh sidecar to access the orchestrator file system via ssh
-    [-f docker-compose.logrotate.override.yml] \ # Deploy a logrotate sidecar to rotate the logs of the orchestrator
+    [-f docker-compose.iso.yml] \ # Deploy service orchestrator instead of oss one
+    [-f docker-compose.ssh.yml] \ # Deploy an ssh sidecar to access the orchestrator file system via ssh
+    [-f docker-compose.logrotate.yml] \ # Deploy a logrotate sidecar to rotate the logs of the orchestrator
     <up|down|ps> [options...]
 ```
 
@@ -64,16 +64,16 @@ sudo docker compose -f docker-compose.yml down -v
 export INMANTA_ORCHESTRATOR_IMAGE=containers.inmanta.com/containers/service-orchestrator:8
 
 # Start db and orchestrator
-sudo docker compose -f docker-compose.yml -f docker-compose.iso.override.yml up -d
+sudo docker compose -f docker-compose.yml -f docker-compose.iso.yml up -d
 
 # Check the containers status
-sudo docker compose -f docker-compose.yml -f docker-compose.iso.override.yml ps -a
+sudo docker compose -f docker-compose.yml -f docker-compose.iso.yml ps -a
 
 # Stop db and orchestrator
-sudo docker compose -f docker-compose.yml -f docker-compose.iso.override.yml down
+sudo docker compose -f docker-compose.yml -f docker-compose.iso.yml down
 
 # Clear storage or db and orchestrator
-sudo docker compose -f docker-compose.yml -f docker-compose.iso.override.yml down -v
+sudo docker compose -f docker-compose.yml -f docker-compose.iso.yml down -v
 ```
 
 ## Deploy the orchestrator with an ssh sidecar
@@ -87,16 +87,16 @@ export INMANTA_ORCHESTRATOR_IMAGE="..."
 export INMANTA_AUTHORIZED_KEYS="ssh-rsa ..."
 
 # Start db, orchestrator and ssh sidecar
-sudo docker compose -f docker-compose.yml -f docker-compose.ssh.override.yml up -d
+sudo docker compose -f docker-compose.yml -f docker-compose.ssh.yml up -d
 
 # Check the containers status
-sudo docker compose -f docker-compose.yml -f docker-compose.ssh.override.yml ps -a
+sudo docker compose -f docker-compose.yml -f docker-compose.ssh.yml ps -a
 
 # Stop db, orchestrator and ssh sidecar
-sudo docker compose -f docker-compose.yml -f docker-compose.ssh.override.yml down
+sudo docker compose -f docker-compose.yml -f docker-compose.ssh.yml down
 
 # Clear storage or db and orchestrator
-sudo docker compose -f docker-compose.yml -f docker-compose.ssh.override.yml down -v
+sudo docker compose -f docker-compose.yml -f docker-compose.ssh.yml down -v
 ```
 
 > :bulb: **How to ssh inside the container?**
@@ -122,14 +122,14 @@ sudo docker compose -f docker-compose.yml -f docker-compose.ssh.override.yml dow
 export INMANTA_ORCHESTRATOR_IMAGE="..."
 
 # Start db, orchestrator and logrotate sidecar
-sudo docker compose -f docker-compose.yml -f docker-compose.logrotate.override.yml up -d
+sudo docker compose -f docker-compose.yml -f docker-compose.logrotate.yml up -d
 
 # Check the containers status
-sudo docker compose -f docker-compose.yml -f docker-compose.logrotate.override.yml ps -a
+sudo docker compose -f docker-compose.yml -f docker-compose.logrotate.yml ps -a
 
 # Stop db, orchestrator and logrotate sidecar
-sudo docker compose -f docker-compose.yml -f docker-compose.logrotate.override.yml down
+sudo docker compose -f docker-compose.yml -f docker-compose.logrotate.yml down
 
 # Clear storage of db, orchestrator and logrotate sidecar
-sudo docker compose -f docker-compose.yml -f docker-compose.logrotate.override.yml down -v
+sudo docker compose -f docker-compose.yml -f docker-compose.logrotate.yml down -v
 ```
