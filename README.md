@@ -9,8 +9,12 @@ The examples of orchestrator setup using docker referenced below can be configur
 | **Name** | **Default** | **Description** |
 | --- | --- | --- |
 | `INMANTA_ORCHESTRATOR_IMAGE` | / | **Required** This environment variable specifies which container image the orchestrator (and ssh sidecar) should use. |
+| `INMANTA_ORCHESTRATOR_IP` | `127.0.0.1` | This environment variable specifies on which ip of the **host** the orchestrator api should be made available. |
+| `INMANTA_ORCHESTRATOR_PORT` | `8888` | This environment variable specifies on which port of the **host** the orchestrator api should be made available. |
 | `POSTGRESQL_VERSION` | `16` | The postgresql version for the db container, the version should match the one required by the orchestrator version in use. |
 | `INMANTA_AUTHORIZED_KEYS` | / | The public keys to insert into the ssh sidecar authorized keys for the inmanta user. |
+| `INMANTA_SSH_SIDECAR_IP` | `127.0.0.1` | This environment variable specifies on which ip of the **host** the ssh sidecar should be made available. |
+| `INMANTA_SSH_SIDECAR_PORT` | `2222` | This environment variable specifies on which port of the **host** the ssh sidecar should be made available. |
 
 ## Composability
 
@@ -72,7 +76,7 @@ sudo docker compose -f docker-compose.yml -f docker-compose.iso.override.yml dow
 
 :bulb: **To give access to your used in the ssh sidecar, you must provide some public key that will be installed in the container.  You can do this using the INMANTA_AUTHORIZED_KEYS environment variable.**
 
-:bulb: Once deployed, you can figure out the ip of the ssh sidecar by inspecting the ssh sidecar container: `docker inspect inmanta-ssh-sidecar`.  To ssh inside the container, you can then use this one liner: `ssh inmanta@$(docker inspect -f '{{range .NetworkSettings.Networks}}{{print .IPAddress}}{{end}}' inmanta-ssh-sidecar)`.
+:bulb: Once deployed, you can figure out the ip of the ssh sidecar by inspecting the ssh sidecar container: `docker inspect inmanta-ssh-sidecar`.  To ssh inside the container, you can then use this one liner: `ssh inmanta@$(docker inspect -f '{{range .NetworkSettings.Networks}}{{print .IPAddress}}{{end}}' inmanta-ssh-sidecar)`.  Alternatively, you can also ssh in the container using the bind port of the container on the host: `ssh -p "${INMANTA_SSH_SIDECAR_PORT:-2222}" "inmanta@${INMANTA_SSH_SIDECAR_IP:-127.0.0.1}"`.
 
 ```bash
 export INMANTA_ORCHESTRATOR_IMAGE="..."

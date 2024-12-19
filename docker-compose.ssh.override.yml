@@ -1,9 +1,11 @@
 services:
-  ssh-sidecar:
+  ssh:
     image: "${INMANTA_ORCHESTRATOR_IMAGE:?error}"
     container_name: inmanta-ssh-sidecar
     pull_policy: always
-    entrypoint: ["/sshd-entrypoint.sh"]
+    entrypoint: ["/usr/bin/tini", "--", "/sshd-entrypoint.sh"]
+    ports:
+      - "${INMANTA_SSH_SIDECAR_IP:-127.0.0.1}:${INMANTA_SSH_SIDECAR_PORT:-2222}:22"
     environment:
       INMANTA_CMDLINE_REST_TRANSPORT_HOST: inmanta-orchestrator
       INMANTA_COMPILER_REST_TRANSPORT_HOST: inmanta-orchestrator

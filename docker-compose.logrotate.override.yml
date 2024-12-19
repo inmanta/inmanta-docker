@@ -3,7 +3,7 @@ services:
     image: "${INMANTA_ORCHESTRATOR_IMAGE:?error}"
     container_name: inmanta-logrotate-sidecar
     pull_policy: always
-    entrypoint: ["/logrotate-entrypoint.sh"]
+    entrypoint: ["/usr/bin/tini", "--", "/logrotate-entrypoint.sh"]
     user: "root:root"
     healthcheck:
       test: ["CMD-SHELL", "grep inmanta /var/lib/logrotate/status"]

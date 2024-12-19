@@ -14,7 +14,7 @@ services:
     container_name: inmanta-orchestrator
     pull_policy: always
     ports:
-      - 127.0.0.1:8888:8888
+      - "${INMANTA_ORCHESTRATOR_IP:-127.0.0.1}:${INMANTA_ORCHESTRATOR_PORT:-8888}:8888"
     environment:
       INMANTA_DATABASE_HOST: inmanta-db
       INMANTA_DATABASE_USERNAME: inmanta
