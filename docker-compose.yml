@@ -8,12 +8,6 @@ services:
       POSTGRES_PASSWORD: inmanta
     volumes:
       - inmanta-db-data:/var/lib/postgresql/data
-    healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U inmanta"]
-      interval: 10s
-      retries: 5
-      start_period: 10s
-      timeout: 10s
 
   server:
     image: "${INMANTA_ORCHESTRATOR_IMAGE:?error}"
@@ -28,9 +22,6 @@ services:
     volumes:
       - inmanta-server-data:/var/lib/inmanta
       - inmanta-server-logs:/var/log/inmanta
-    depends_on:
-      db:
-        condition: service_healthy
 
 volumes:
   inmanta-db-data: {}
