@@ -9,7 +9,7 @@ The examples of orchestrator setup using docker referenced below can be configur
 | **Name** | **Default** | **Description** |
 | --- | --- | --- |
 | `INMANTA_ORCHESTRATOR_IMAGE` | / | **Required** This environment variable specifies which container image the orchestrator (and ssh sidecar) should use. |
-| `POSTGRESQL_VERSION` | `14` | The postgresql version for the db container, the version should match the one required by the orchestrator version in use. |
+| `POSTGRESQL_VERSION` | `16` | The postgresql version for the db container, the version should match the one required by the orchestrator version in use. |
 | `INMANTA_AUTHORIZED_KEYS` | / | The public keys to insert into the ssh sidecar authorized keys for the inmanta user. |
 
 ## Composability
