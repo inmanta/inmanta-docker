@@ -65,6 +65,10 @@ sudo docker compose -f docker-compose.yml down -v
 # Latest iso release
 export INMANTA_ORCHESTRATOR_IMAGE=containers.inmanta.com/containers/service-orchestrator:8
 
+# Copy the license files in the license folder
+cp "..." license/example.com.license
+cp "..." license/example.com.jwe
+
 # Start db and orchestrator
 sudo docker compose -f docker-compose.yml -f docker-compose.iso.yml up -d
 
