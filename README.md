@@ -16,7 +16,7 @@ The examples of orchestrator setup using docker referenced below can be configur
 | `INMANTA_SSH_SIDECAR_IP` | `127.0.0.1` | `docker-compose.ssh.override.yml` | This environment variable specifies on which ip of the **host** the ssh sidecar should be made available. |
 | `INMANTA_SSH_SIDECAR_PORT` | `2222` | `docker-compose.ssh.override.yml` | This environment variable specifies on which port of the **host** the ssh sidecar should be made available. |
 
-## Composability
+## Composition
 
 The files in this repo allow to deploy the orchestrator with different topologies.  The desired topology should be composed by passing more or less `docker-compose.*.override.yml` files to docker compose.  The file `docker-compose.yml` should always be provided.
 
