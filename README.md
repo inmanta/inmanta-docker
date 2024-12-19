@@ -74,9 +74,7 @@ sudo docker compose -f docker-compose.yml -f docker-compose.iso.override.yml dow
 
 ## Deploy the orchestrator with an ssh sidecar
 
-:bulb: **To give access to your used in the ssh sidecar, you must provide some public key that will be installed in the container.  You can do this using the INMANTA_AUTHORIZED_KEYS environment variable.**
-
-:bulb: Once deployed, you can figure out the ip of the ssh sidecar by inspecting the ssh sidecar container: `docker inspect inmanta-ssh-sidecar`.  To ssh inside the container, you can then use this one liner: `ssh inmanta@$(docker inspect -f '{{range .NetworkSettings.Networks}}{{print .IPAddress}}{{end}}' inmanta-ssh-sidecar)`.  Alternatively, you can also ssh in the container using the bind port of the container on the host: `ssh -p "${INMANTA_SSH_SIDECAR_PORT:-2222}" "inmanta@${INMANTA_SSH_SIDECAR_IP:-127.0.0.1}"`.
+:warning: **To give access to your used in the ssh sidecar, you must provide some public key that will be installed in the container.  You can do this using the INMANTA_AUTHORIZED_KEYS environment variable.**
 
 ```bash
 export INMANTA_ORCHESTRATOR_IMAGE="..."
@@ -96,6 +94,21 @@ sudo docker compose -f docker-compose.yml -f docker-compose.ssh.override.yml dow
 # Clear storage or db and orchestrator
 sudo docker compose -f docker-compose.yml -f docker-compose.ssh.override.yml down -v
 ```
+
+> :bulb: **How to ssh inside the container?**
+> 
+> Once deployed, you can figure out the ip of the ssh sidecar by inspecting the ssh sidecar container: 
+> ```
+> docker inspect inmanta-ssh-sidecar`
+> ```
+> To ssh inside the container, you can then use this one liner:
+> ```
+> ssh inmanta@$(docker inspect -f '{{range .NetworkSettings.Networks}}{{print .IPAddress}}{{end}}' inmanta-ssh-sidecar)
+> ```
+> Alternatively, you can also ssh in the container using the bind port of the container on the host:
+> ```
+> ssh -p "${INMANTA_SSH_SIDECAR_PORT:-2222}" "inmanta@${INMANTA_SSH_SIDECAR_IP:-127.0.0.1}"
+> ```
 
 ## Deploy the orchestrator with a logrotate sidecar
 
