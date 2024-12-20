@@ -27,12 +27,12 @@ The examples of orchestrator setup using docker referenced below can be configur
 The files in this repo allow to deploy the orchestrator with different topologies.  The desired topology should be composed by passing more or less `docker-compose.*.yml` files to docker compose.  The file `docker-compose.yml` should always be provided.
 
 The docker compose commands can be summarized this way:
-```bash
-sudo docker compose \
-    -f docker-compose.yml \
-    [-f docker-compose.iso.yml] \ # Deploy service orchestrator instead of oss one
-    [-f docker-compose.ssh.yml] \ # Deploy an ssh sidecar to access the orchestrator file system via ssh
-    [-f docker-compose.logrotate.yml] \ # Deploy a logrotate sidecar to rotate the logs of the orchestrator
+```
+sudo docker compose
+    -f docker-compose.yml
+    [-f docker-compose.iso.yml]  # Deploy service orchestrator instead of oss one
+    [-f docker-compose.ssh.yml]  # Deploy an ssh sidecar to access the orchestrator file system via ssh
+    [-f docker-compose.logrotate.yml]  # Deploy a logrotate sidecar to rotate the logs of the orchestrator
     <up|down|ps> [options...]
 ```
 
