@@ -1,8 +1,7 @@
 services:
   server:
-    image: "${INMANTA_ORCHESTRATOR_IMAGE:?error}"
     environment:
-      INMANTA_DATABASE_HOST: 172.20.0.2
+      INMANTA_DATABASE_HOST: inmanta-db
       INMANTA_DATABASE_USERNAME: inmanta
       INMANTA_DATABASE_PASSWORD: inmanta
       INMANTA_LICENSE_ENTITLEMENT_FILE: "/etc/inmanta/license/example.com.jwe"

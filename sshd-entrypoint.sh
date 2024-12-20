@@ -21,7 +21,9 @@ INMANTA_PROFILE="${INMANTA_USER_HOME_DIR}/.profile"
 LOAD_ENV_CMD=". $INMANTA_ENV_FILE"
 
 # Overwrite environment variables in dedicated file
-export | grep INMANTA > $INMANTA_ENV_FILE
+if export | grep INMANTA; then
+    export | grep INMANTA > $INMANTA_ENV_FILE
+fi
 
 # Make sure to load environment variables when login in
 touch $INMANTA_PROFILE
