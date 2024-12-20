@@ -10,11 +10,11 @@ This repo contains some example of docker based orchestrator deployments.  We il
 
 ## Configuration
 
-The examples of orchestrator setup using docker referenced below can be configured using some environment variables, they are documented in the table below.  The environment variables are to be provided to docker compose itself, they are not exposed directly to the processes running inside the containers.
+The examples of orchestrator setup using docker referenced below can be configured using some environment variables, they are documented in the table below.  The environment variables are to be provided to docker compose itself, they are not exposed directly to the processes running inside the containers.  To do so, you can either save them in a file named `.env` in the current directory, or export them in the current shell and pass them on to `docker compose` using the `--env` option, taking as argument the name of the environment variable `docker compose` should read.
 
 | **Name** | **Default** | **Used by** | **Description** |
 | --- | --- | --- | --- |
-| `INMANTA_ORCHESTRATOR_IMAGE` | / | all | **Required** This environment variable specifies which container image the orchestrator (and ssh sidecar) should use. |
+| `INMANTA_ORCHESTRATOR_IMAGE` | `ghcr.io/inmanta/orchestrator:latest` | all | This environment variable specifies which container image the orchestrator (and sidecars) should use. |
 | `INMANTA_ORCHESTRATOR_IP` | `127.0.0.1` | `docker-compose.yml` | This environment variable specifies on which ip of the **host** the orchestrator api should be made available. |
 | `INMANTA_ORCHESTRATOR_PORT` | `8888` | `docker-compose.yml` | This environment variable specifies on which port of the **host** the orchestrator api should be made available. |
 | `POSTGRESQL_VERSION` | `16` | `docker-compose.yml` | The postgresql version for the db container, the version should match the one required by the orchestrator version in use. |
@@ -42,7 +42,7 @@ sudo docker compose
 
 ```bash
 # Latest oss release
-export INMANTA_ORCHESTRATOR_IMAGE=ghcr.io/inmanta/orchestrator:latest
+echo INMANTA_ORCHESTRATOR_IMAGE=ghcr.io/inmanta/orchestrator:latest >> .env
 
 # Start db and orchestrator
 sudo docker compose -f docker-compose.yml up -d
@@ -63,7 +63,7 @@ sudo docker compose -f docker-compose.yml down -v
 
 ```bash
 # Latest iso release
-export INMANTA_ORCHESTRATOR_IMAGE=containers.inmanta.com/containers/service-orchestrator:8
+echo "INMANTA_ORCHESTRATOR_IMAGE=containers.inmanta.com/containers/service-orchestrator:8" >> .env
 
 # Copy the license files in the license folder
 cp "..." license/example.com.license
@@ -87,10 +87,10 @@ sudo docker compose -f docker-compose.yml -f docker-compose.iso.yml down -v
 :warning: **To give access to your used in the ssh sidecar, you must provide some public key that will be installed in the container.  You can do this using the INMANTA_AUTHORIZED_KEYS environment variable.**
 
 ```bash
-export INMANTA_ORCHESTRATOR_IMAGE="..."
+echo "INMANTA_ORCHESTRATOR_IMAGE=..." >> .env
 
 # Your own, new-line separated, public key(s)
-export INMANTA_AUTHORIZED_KEYS="ssh-rsa ..."
+echo "INMANTA_AUTHORIZED_KEYS=ssh-rsa ..." >> .env
 
 # Start db, orchestrator and ssh sidecar
 sudo docker compose -f docker-compose.yml -f docker-compose.ssh.yml up -d
@@ -125,7 +125,7 @@ sudo docker compose -f docker-compose.yml -f docker-compose.ssh.yml down -v
 :bulb: The health check of the logrotate container will check that logrotate has inmanta in its status file.  This status file is only created after the first logrotate execution, which may happen anytime in the first 24h of the container lifetime.  To avoid keeping the container in a "starting" health for 24h, until the status file is visible, we rather check for the existence of the logrotate binary.
 
 ```bash
-export INMANTA_ORCHESTRATOR_IMAGE="..."
+echo "INMANTA_ORCHESTRATOR_IMAGE=..." >> .env
 
 # Start db, orchestrator and logrotate sidecar
 sudo docker compose -f docker-compose.yml -f docker-compose.logrotate.yml up -d
