@@ -6,10 +6,10 @@ services:
     entrypoint: ["/usr/bin/tini", "--", "/logrotate-entrypoint.sh"]
     user: "root:root"
     healthcheck:
-      test: ["CMD-SHELL", "grep inmanta /var/lib/logrotate/status"]
-      interval: 1h
+      test: ["CMD-SHELL", "if [ -f /var/lib/logrotate/status ]; then grep inmanta /var/lib/logrotate/status; else which logrotate; fi"]
+      interval: 5m
       retries: 5
-      start_period: 24h
+      start_period: 30s
       timeout: 10s
     volumes:
       - ./logrotate-entrypoint.sh:/logrotate-entrypoint.sh

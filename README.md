@@ -122,7 +122,7 @@ sudo docker compose -f docker-compose.yml -f docker-compose.ssh.yml down -v
 
 ### Deploy the orchestrator with a logrotate sidecar
 
-:bulb: The health check of the logrotate container may stay in the starting state for a very long time (up to 24h) as it checks that logrotate did run, which happens only once a day.
+:bulb: The health check of the logrotate container will check that logrotate has inmanta in its status file.  This status file is only created after the first logrotate execution, which may happen anytime in the first 24h of the container lifetime.  To avoid keeping the container in a "starting" health for 24h, until the status file is visible, we rather check for the existence of the logrotate binary.
 
 ```bash
 export INMANTA_ORCHESTRATOR_IMAGE="..."

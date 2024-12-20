@@ -1,6 +1,5 @@
 services:
   server:
-    image: "${INMANTA_ORCHESTRATOR_IMAGE:?error}"
     environment:
       INMANTA_DATABASE_HOST: inmanta-db
       INMANTA_DATABASE_USERNAME: inmanta
