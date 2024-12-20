@@ -14,7 +14,7 @@ The examples of orchestrator setup using docker referenced below can be configur
 
 | **Name** | **Default** | **Used by** | **Description** |
 | --- | --- | --- | --- |
-| `INMANTA_ORCHESTRATOR_IMAGE` | `ghcr.io/inmanta/orchestrator:latest` | all | This environment variable specifies which container image the orchestrator (and ssh sidecar) should use. |
+| `INMANTA_ORCHESTRATOR_IMAGE` | `ghcr.io/inmanta/orchestrator:latest` | all | This environment variable specifies which container image the orchestrator (and sidecars) should use. |
 | `INMANTA_ORCHESTRATOR_IP` | `127.0.0.1` | `docker-compose.yml` | This environment variable specifies on which ip of the **host** the orchestrator api should be made available. |
 | `INMANTA_ORCHESTRATOR_PORT` | `8888` | `docker-compose.yml` | This environment variable specifies on which port of the **host** the orchestrator api should be made available. |
 | `POSTGRESQL_VERSION` | `16` | `docker-compose.yml` | The postgresql version for the db container, the version should match the one required by the orchestrator version in use. |
