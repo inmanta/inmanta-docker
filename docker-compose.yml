@@ -11,7 +11,7 @@ services:
     command: "postgres -c jit=off"
 
   server:
-    image: "${INMANTA_ORCHESTRATOR_IMAGE:?error}"
+    image: "${INMANTA_ORCHESTRATOR_IMAGE:-ghcr.io/inmanta/orchestrator:latest}"
     container_name: inmanta-orchestrator
     pull_policy: always
     ports:

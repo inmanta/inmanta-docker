@@ -1,5 +1,6 @@
 services:
   server:
+    image: "${INMANTA_ORCHESTRATOR_IMAGE:-containers.inmanta.com/containers/service-orchestrator:8}"
     environment:
       INMANTA_DATABASE_HOST: inmanta-db
       INMANTA_DATABASE_USERNAME: inmanta
