@@ -8,6 +8,7 @@ services:
       POSTGRES_PASSWORD: inmanta
     volumes:
       - inmanta-db-data:/var/lib/postgresql/data
+    command: "postgres -c jit=off"
 
   server:
     image: "${INMANTA_ORCHESTRATOR_IMAGE:?error}"
