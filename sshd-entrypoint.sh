@@ -31,11 +31,12 @@ grep -e "$LOAD_ENV_CMD" "$INMANTA_PROFILE" || echo "$LOAD_ENV_CMD" >> "$INMANTA_
 
 # Configure ssh server
 apt-get install -y openssh-server
-[ -f /etc/ssh/ssh_host_* ] || ssh-keygen -A
+ssh-keygen -A
 
 # Configure the inmanta user remote access
 mkdir -p "$INMANTA_USER_HOME_DIR/.ssh"
 chmod 700 "$INMANTA_USER_HOME_DIR" "$INMANTA_USER_HOME_DIR/.ssh"
+touch "$INMANTA_USER_HOME_DIR/.ssh/authorized_keys"
 if [ "$INMANTA_USER_AUTHORIZED_KEYS" != "" ]; then
     echo "$INMANTA_USER_AUTHORIZED_KEYS" > "$INMANTA_USER_HOME_DIR/.ssh/authorized_keys"
 fi
