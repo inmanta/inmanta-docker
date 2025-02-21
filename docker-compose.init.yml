@@ -9,10 +9,10 @@ services:
       INMANTA_COMPILER_REST_TRANSPORT_HOST: inmanta-orchestrator
       INMANTA_CLIENT_REST_TRANSPORT_HOST: inmanta-orchestrator
       INMANTA_MODULE_REPO_URL: "${INMANTA_MODULE_REPO_URL:?error}"
-      INMANTA_MODULE_REPO_BRANCH: "master"
+      INMANTA_MODULE_REPO_BRANCH: "${INMANTA_MODULE_REPO_URL:-master}"
       INMANTA_LSM_HOST: "inmanta-orchestrator"
       INMANTA_LSM_SRV_PORT: "8888"
-      INMANTA_PYTEST_ARGUMENTS: "tests"
+      INMANTA_PYTEST_ARGUMENTS: "${INMANTA_PYTEST_ARGUMENTS:-tests}"
     user: "root:root"
     volumes:
       - ./init-entrypoint.sh:/init-entrypoint.sh

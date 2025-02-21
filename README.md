@@ -21,6 +21,9 @@ The examples of orchestrator setup using docker referenced below can be configur
 | `INMANTA_AUTHORIZED_KEYS` | / | `docker-compose.ssh.yml` | The public keys to insert into the ssh sidecar authorized keys for the inmanta user. |
 | `INMANTA_SSH_SIDECAR_IP` | `127.0.0.1` | `docker-compose.ssh.yml` | This environment variable specifies on which ip of the **host** the ssh sidecar should be made available. |
 | `INMANTA_SSH_SIDECAR_PORT` | `2222` | `docker-compose.ssh.yml` | This environment variable specifies on which port of the **host** the ssh sidecar should be made available. |
+| `INMANTA_MODULE_REPO_URL` | / | `docker-compose.init.yml` | This environment variable specifies the url of the git repo containing the init test case. |
+| `INMANTA_MODULE_REPO_BRANCH` | `master` | `docker-compose.init.yml` | This environment variable specifies the branch of the git repo containing the init test case. |
+| `INMANTA_PYTEST_ARGUMENTS` | `tests` | `docker-compose.init.yml` | This environment variable specifies the arguments to give to pytest when running the initialization tests. |
 
 ## Composition
 
@@ -33,6 +36,7 @@ sudo docker compose
     [-f docker-compose.iso.yml]  # Deploy service orchestrator instead of oss one
     [-f docker-compose.ssh.yml]  # Deploy an ssh sidecar to access the orchestrator file system via ssh
     [-f docker-compose.logrotate.yml]  # Deploy a logrotate sidecar to rotate the logs of the orchestrator
+    [-f docker-compose.init.yml] # Deploy a temporary sidecar, which can run a test case of a module to initialize the orchestrator
     <up|down|ps> [options...]
 ```
 
@@ -138,6 +142,29 @@ sudo docker compose -f docker-compose.yml -f docker-compose.logrotate.yml down
 
 # Clear storage of db, orchestrator and logrotate sidecar
 sudo docker compose -f docker-compose.yml -f docker-compose.logrotate.yml down -v
+```
+
+### Deploy the service orchestrator with an init sidecar
+
+:bulb: When developing a module, it is not uncommon to have a test case based on [pytest-inmanta-lsm](https://github.com/inmanta/pytest-inmanta-lsm) which resets an environment of a running orchestrator and deploys the model of the module, containing the service definition defined in the module.  Such test case can easily be used to initialize an orchestrator with the given project, for **development purposes**.
+
+```bash
+echo "INMANTA_ORCHESTRATOR_IMAGE=..." >> .env
+echo "INMANTA_MODULE_REPO_URL=..." >> .env
+echo "INMANTA_MODULE_REPO_BRANCH=..." >> .env
+echo "INMANTA_PYTEST_ARGUMENTS=..." >> .env
+
+# Start db, service orchestrator and init sidecar
+sudo docker compose -f docker-compose.yml -f docker-compose.iso.yml -f docker-compose.init.yml up -d
+
+# Check the containers status
+sudo docker compose -f docker-compose.yml -f docker-compose.iso.yml -f docker-compose.init.yml ps -a
+
+# Stop db, service orchestrator and init sidecar
+sudo docker compose -f docker-compose.yml -f docker-compose.iso.yml -f docker-compose.init.yml down
+
+# Clear storage of db, service orchestrator and init sidecar
+sudo docker compose -f docker-compose.yml -f docker-compose.iso.yml -f docker-compose.init.yml down -v
 ```
 
 ## Rationale
