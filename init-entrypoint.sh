@@ -49,6 +49,8 @@ venv/bin/pip install -e /tmp/module -c requirements.txt -r requirements.dev.txt
 
 # Use pytest-inmanta-lsm, installed in the venv, to initialize the orchestrator
 export INMANTA_LSM_CONTAINER_ENV="true"
+export INMANTA_LSM_NO_HALT="true"
+export INMANTA_LSM_NO_CLEAN="true"
 export INMANTA_LSM_REMOTE_SHELL="sudo -i -u"
 export INMANTA_LSM_REMOTE_HOST="inmanta"
 exec venv/bin/pytest $INMANTA_PYTEST_ARGUMENTS
