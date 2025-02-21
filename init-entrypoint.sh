@@ -38,7 +38,7 @@ cd /tmp/module
 git checkout master && git pull
 
 # Install sudo in the container
-apt install -y sudo
+apt-get install -y sudo
 
 # Create a virtual environment to install the module and its dependencies
 [ -d venv ] || /opt/inmanta/bin/python -m venv venv
