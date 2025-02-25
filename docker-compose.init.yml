@@ -1,0 +1,20 @@
+services:
+  init:
+    image: "${INMANTA_ORCHESTRATOR_IMAGE:?error}"
+    container_name: inmanta-init-sidecar
+    pull_policy: always
+    entrypoint: ["/usr/bin/tini", "--", "/init-entrypoint.sh"]
+    environment:
+      INMANTA_CMDLINE_REST_TRANSPORT_HOST: inmanta-orchestrator
+      INMANTA_COMPILER_REST_TRANSPORT_HOST: inmanta-orchestrator
+      INMANTA_CLIENT_REST_TRANSPORT_HOST: inmanta-orchestrator
+      INMANTA_MODULE_REPO_URL: "${INMANTA_MODULE_REPO_URL:?error}"
+      INMANTA_MODULE_REPO_BRANCH: "${INMANTA_MODULE_REPO_URL:-master}"
+      INMANTA_LSM_HOST: "inmanta-orchestrator"
+      INMANTA_LSM_SRV_PORT: "8888"
+      INMANTA_PYTEST_ARGUMENTS: "${INMANTA_PYTEST_ARGUMENTS:-tests}"
+    user: "root:root"
+    volumes:
+      - ./init-entrypoint.sh:/init-entrypoint.sh
+      - inmanta-server-data:/var/lib/inmanta
+      - inmanta-server-logs:/var/log/inmanta
