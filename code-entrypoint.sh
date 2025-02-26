@@ -1,8 +1,7 @@
 #!/usr/bin/env bash
 # Alternative entrypoint for the inmanta orchestrator container.
-# Instead of starting the orchestrator, it clones a module and runs one of its
-# test case.  This test case is expected to use pytest-inmanta-lsm to initialize
-# the orchestrator.
+# Instead of starting the orchestrator, it starts a code-server to allow easy access
+# to the orchestrator state directory.
 
 set -x
 set -e
