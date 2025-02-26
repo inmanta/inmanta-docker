@@ -25,11 +25,14 @@ fi
 touch $INMANTA_PROFILE
 grep -e "$LOAD_ENV_CMD" "$INMANTA_PROFILE" || echo "$LOAD_ENV_CMD" >> "$INMANTA_PROFILE"
 
-# Install the code-server
-curl -fsSL https://code-server.dev/install.sh | sh
-
 # Install sudo in the container
 apt-get install -y sudo
+
+# Install the code-server and relevant extensions
+curl -fsSL https://code-server.dev/install.sh | sh
+sudo -u inmanta code-server --install-extension ms-python.python
+curl https://packages.inmanta.com/public/quickstart/raw/names/inmanta.inmanta.vsix/versions/1.7.0/inmanta-1.7.0.vsix -o /tmp/inmanta.inmanta.vsix
+sudo -u inmanta code-server --install-extension /tmp/inmanta.inmanta.vsix
 
 # Start the code-server
 exec sudo -u inmanta code-server --bind-addr 0.0.0.0:8080 --auth none
