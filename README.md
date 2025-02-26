@@ -39,6 +39,7 @@ sudo docker compose
     [-f docker-compose.ssh.yml]  # Deploy an ssh sidecar to access the orchestrator file system via ssh
     [-f docker-compose.logrotate.yml]  # Deploy a logrotate sidecar to rotate the logs of the orchestrator
     [-f docker-compose.init.yml] # Deploy a temporary sidecar, which can run a test case of a module to initialize the orchestrator
+    [-f docker-compose.code.yml] # Deploy a code server sidecar, which allows to modify the orchestrator environment files from a web browser
     <up|down|ps> [options...]
 ```
 
