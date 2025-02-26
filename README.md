@@ -24,6 +24,8 @@ The examples of orchestrator setup using docker referenced below can be configur
 | `INMANTA_MODULE_REPO_URL` | / | `docker-compose.init.yml` | This environment variable specifies the url of the git repo containing the init test case. |
 | `INMANTA_MODULE_REPO_BRANCH` | `master` | `docker-compose.init.yml` | This environment variable specifies the branch of the git repo containing the init test case. |
 | `INMANTA_PYTEST_ARGUMENTS` | `tests` | `docker-compose.init.yml` | This environment variable specifies the arguments to give to pytest when running the initialization tests. |
+| `INMANTA_CODE_SERVER_IP` | `127.0.0.1` | `docker-compose.code.yml` | This environment variable specifies on which ip of the **host** the code server sidecar should be made available. |
+| `INMANTA_CODE_SERVER_PORT` | `8080` | `docker-compose.code.yml` | This environment variable specifies on which port of the **host** the code server sidecar should be made available. |
 
 ## Composition
 
@@ -37,6 +39,7 @@ sudo docker compose
     [-f docker-compose.ssh.yml]  # Deploy an ssh sidecar to access the orchestrator file system via ssh
     [-f docker-compose.logrotate.yml]  # Deploy a logrotate sidecar to rotate the logs of the orchestrator
     [-f docker-compose.init.yml] # Deploy a temporary sidecar, which can run a test case of a module to initialize the orchestrator
+    [-f docker-compose.code.yml] # Deploy a code server sidecar, which allows to modify the orchestrator environment files from a web browser
     <up|down|ps> [options...]
 ```
 
@@ -165,6 +168,26 @@ sudo docker compose -f docker-compose.yml -f docker-compose.iso.yml -f docker-co
 
 # Clear storage of db, service orchestrator and init sidecar
 sudo docker compose -f docker-compose.yml -f docker-compose.iso.yml -f docker-compose.init.yml down -v
+```
+
+### Deploy the service orchestrator with a code-server sidecar
+
+:bulb: When developing a model, it can be convenient to work on the model that is present in the orchestrator environment, while relying on the inmanta vscode extension.  This sidecar allows you to deploy a code-server on the side of the orchestrator to simplify such development scenario.
+
+```bash
+echo "INMANTA_ORCHESTRATOR_IMAGE=..." >> .env
+
+# Start db, service orchestrator and code-server sidecar
+sudo docker compose -f docker-compose.yml -f docker-compose.code.yml up -d
+
+# Check the containers status
+sudo docker compose -f docker-compose.yml -f docker-compose.code.yml ps -a
+
+# Stop db, service orchestrator and code-server sidecar
+sudo docker compose -f docker-compose.yml -f docker-compose.code.yml down
+
+# Clear storage of db, service orchestrator and code-server sidecar
+sudo docker compose -f docker-compose.yml -f docker-compose.code.yml down -v
 ```
 
 ## Rationale
