@@ -25,6 +25,7 @@ touch $INMANTA_PROFILE
 grep -e "$LOAD_ENV_CMD" "$INMANTA_PROFILE" || echo "$LOAD_ENV_CMD" >> "$INMANTA_PROFILE"
 
 # Install sudo in the container
+apt-get update
 apt-get install -y sudo
 
 # Install the code-server and relevant extensions

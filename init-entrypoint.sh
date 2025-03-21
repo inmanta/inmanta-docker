@@ -38,6 +38,7 @@ cd /tmp/module
 git checkout master && git pull
 
 # Install sudo in the container
+apt-get update
 apt-get install -y sudo
 
 # Create a virtual environment to install the module and its dependencies
