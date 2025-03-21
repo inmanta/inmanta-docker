@@ -30,6 +30,7 @@ touch $INMANTA_PROFILE
 grep -e "$LOAD_ENV_CMD" "$INMANTA_PROFILE" || echo "$LOAD_ENV_CMD" >> "$INMANTA_PROFILE"
 
 # Configure ssh server
+apt-get update
 apt-get install -y openssh-server
 ssh-keygen -A
 

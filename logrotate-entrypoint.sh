@@ -7,6 +7,7 @@ set -x
 set -e
 
 # Configure cron and logrotate
+apt-get update
 apt-get install -y cron logrotate
 if [ ! -f /etc/logrotate.d/inmanta ]; then
     cat > /etc/logrotate.d/inmanta <<EOF
