@@ -43,7 +43,7 @@ sudo docker compose
     [-f docker-compose.logrotate.yml]  # Deploy a logrotate sidecar to rotate the logs of the orchestrator
     [-f docker-compose.init.yml] # Deploy a temporary sidecar, which can run a test case of a module to initialize the orchestrator
     [-f docker-compose.code.yml] # Deploy a code server sidecar, which allows to modify the orchestrator environment files from a web browser
-    [-f docker-compose.db-dumps.yml] # Deploy a db-dump sidecar, periodically dumping the full db into a file
+    [-f docker-compose.db-dump.yml] # Deploy a db-dump sidecar, periodically dumping the full db into a file
     <up|down|ps> [options...]
 ```
 
@@ -202,16 +202,16 @@ sudo docker compose -f docker-compose.yml -f docker-compose.code.yml down -v
 echo "INMANTA_ORCHESTRATOR_IMAGE=..." >> .env
 
 # Start db, orchestrator and periodic db dumps sidecar
-sudo docker compose -f docker-compose.yml -f docker-compose.db-dumps.yml up -d
+sudo docker compose -f docker-compose.yml -f docker-compose.db-dump.yml up -d
 
 # Check the containers status
-sudo docker compose -f docker-compose.yml -f docker-compose.db-dumps.yml ps -a
+sudo docker compose -f docker-compose.yml -f docker-compose.db-dump.yml ps -a
 
 # Stop db, orchestrator and periodic db dumps sidecar
-sudo docker compose -f docker-compose.yml -f docker-compose.db-dumps.yml down
+sudo docker compose -f docker-compose.yml -f docker-compose.db-dump.yml down
 
 # Clear storage of db, orchestrator and periodic db dumps sidecar
-sudo docker compose -f docker-compose.yml -f docker-compose.db-dumps.yml down -v
+sudo docker compose -f docker-compose.yml -f docker-compose.db-dump.yml down -v
 ```
 
 ## Rationale
