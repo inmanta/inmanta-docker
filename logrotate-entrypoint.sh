@@ -21,5 +21,12 @@ $INMANTA_CONFIG_LOG_DIR/*.log $INMANTA_CONFIG_LOG_DIR/*.out $INMANTA_CONFIG_LOG_
 EOF
 fi
 
+# Make sure that no other cron job needs to be executed
+rm /etc/cron.hourly/* -f
+find /etc/cron.daily/ ! -name 'logrotate' -type f -exec rm -f {} +
+rm /etc/cron.weekly/* -f
+rm /etc/cron.monthly/* -f
+rm /etc/cron.yearly/* -f
+
 # Run cron as a main process
 exec cron -f
