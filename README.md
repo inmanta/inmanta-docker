@@ -174,7 +174,7 @@ sudo docker compose -f docker-compose.yml -f docker-compose.iso.yml -f docker-co
 sudo docker compose -f docker-compose.yml -f docker-compose.iso.yml -f docker-compose.init.yml down -v
 ```
 
-### Deploy the service orchestrator with a code-server sidecar
+### Deploy the orchestrator with a code-server sidecar
 
 :bulb: When developing a model, it can be convenient to work on the model that is present in the orchestrator environment, while relying on the inmanta vscode extension.  This sidecar allows you to deploy a code-server on the side of the orchestrator to simplify such development scenario.
 
@@ -194,7 +194,7 @@ sudo docker compose -f docker-compose.yml -f docker-compose.code.yml down
 sudo docker compose -f docker-compose.yml -f docker-compose.code.yml down -v
 ```
 
-### Deploy the service orchestrator with periodic db dumps
+### Deploy the orchestrator with periodic db dumps
 
 :bulb: This sidecar will run a cron daemon, which will create a full database dump once a day.  The database dump is created in a folder named db-dumps in the current working directory.
 
