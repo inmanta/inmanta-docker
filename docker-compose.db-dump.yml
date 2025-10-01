@@ -1,0 +1,15 @@
+services:
+  db-dump:
+    image: "docker.io/library/postgres:${POSTGRESQL_VERSION:-16}"
+    container_name: inmanta-db-dump-sidecar
+    pull_policy: always
+    entrypoint: ["/db-dump-entrypoint.sh"]
+    environment:
+      PGHOST: db
+      PGUSER: inmanta
+      PGDATABASE: inmanta
+      PGPASSWORD: inmanta
+    user: "root:root"
+    volumes:
+      - ./db-dump-entrypoint.sh:/db-dump-entrypoint.sh
+      - ./db-dumps/:/var/lib/postgresql/data
