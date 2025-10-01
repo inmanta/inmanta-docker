@@ -10,6 +10,16 @@ services:
       PGDATABASE: inmanta
       PGPASSWORD: inmanta
     user: "root:root"
+    healthcheck:
+      test: ["CMD-SHELL", "if [ -f /var/lib/logrotate/status ]; then grep postgres /var/lib/logrotate/status; else which logrotate; fi"]
+      interval: 5m
+      retries: 5
+      start_period: 30s
+      timeout: 10s
     volumes:
       - ./db-dump-entrypoint.sh:/db-dump-entrypoint.sh
       - ./db-dumps/:/var/lib/postgresql/data
+      - inmanta-db-dump-data:/var/lib/logrotate
+
+volumes:
+  inmanta-db-dump-data: {}
