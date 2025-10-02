@@ -1,6 +1,6 @@
 #!/usr/bin/env sh
-# Alternative entrypoint for the inmanta orchestrator container.
-# Instead of starting the orchestrator, it starts a cron daemon, to allow
+# Alternative entrypoint for the postgresql container.
+# Instead of starting a database, it starts a cron daemon, to allow
 # pg_dump to periodically run and export a database dump.
 
 set -x
