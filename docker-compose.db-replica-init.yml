@@ -30,6 +30,7 @@ services:
       PGUSER: replicator
       PGPASSWORD: replicator_password
       PGAPPNAME: inmanta
+    # Inspired from https://medium.com/@eremeykin/how-to-setup-single-primary-postgresql-replication-with-docker-compose-98c48f233bbf
     command: |
       bash -c "
       until pg_basebackup --pgdata=/var/lib/postgresql/data -R --slot=replication_slot
