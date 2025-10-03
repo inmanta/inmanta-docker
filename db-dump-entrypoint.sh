@@ -15,6 +15,8 @@ apt-get install -y cron logrotate  tini
 if [ ! -f /db_dump ]; then
     cat > /db_dump <<EOF
 #!/usr/bin/env sh
+set -x
+set -e
 $(export)
 pg_dump -f /var/lib/postgresql/data/db_dump.sql
 EOF
