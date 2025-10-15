@@ -43,7 +43,7 @@ if [ -z "$DATABASE_ALREADY_EXISTS" ]; then
 	docker_setup_db
 	docker_process_init_files /docker-entrypoint-initdb.d/*
 
-    REPLICA_USERNAME="${POSTGRES_REPLICA_USERNAME:?Postgres replica user name should be set}"
+    REPLICA_USERNAME="${POSTGRES_REPLICA_USER:?Postgres replica user name should be set}"
     REPLICA_PASSWORD="${POSTGRES_REPLICA_PASSWORD:?Postgres replica password should be set}"
 
     echo "CREATE USER ${REPLICA_USERNAME} WITH REPLICATION ENCRYPTED PASSWORD '${REPLICA_PASSWORD}';" | docker_process_sql

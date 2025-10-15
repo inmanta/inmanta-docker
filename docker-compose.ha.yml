@@ -10,7 +10,7 @@ services:
         scram-sha-256
         host replication all 0.0.0.0/0 md5
       POSTGRES_INITDB_ARGS: "--auth-host=scram-sha-256"
-      POSTGRES_REPLICA_USERNAME: replica
+      POSTGRES_REPLICA_USER: replica
       POSTGRES_REPLICA_PASSWORD: inmanta
       POSTGRES_REPLICA_APPNAME: inmanta
     entrypoint: "/postgres-entrypoint.sh"
