@@ -190,6 +190,28 @@ sudo docker compose -f docker-compose.yml -f docker-compose.code.yml down
 sudo docker compose -f docker-compose.yml -f docker-compose.code.yml down -v
 ```
 
+### Deploy the service orchestrator with a database replication
+
+:bulb: When working with the lsm service inventory, data persistence is key, as the inventory contains the source of the whole intent.  Postgres has some advanced replication features that allow us to have a setup where data is always written in two databases before being considered "written" by the orchestrator.  This makes the installation more resilient to failures.  The setup describes here corresponds to the "Durable" flavor, from the inmanta documentation: https://docs.inmanta.com/inmanta-service-orchestrator/latest/administrators/ha-setup.html
+
+:warning: In this setup, we run both containers side by side, on the same host.  It doesn't make much sense, as we are much more likely to loose the full host than only of of two postgres containers.  Real deployments should instead deploy the containers on different vms (i.e. the replica on a dedicated host).
+
+```bash
+echo "INMANTA_ORCHESTRATOR_IMAGE=..." >> .env
+
+# Start databases and service orchestrator
+sudo docker compose -f docker-compose.yml -f docker-compose.iso.yml -f docker-compose.ha.yml up -d
+
+# Check the containers status
+sudo docker compose -f docker-compose.yml -f docker-compose.iso.yml -f docker-compose.ha.yml ps -a
+
+# Stop databases and service orchestrator
+sudo docker compose -f docker-compose.yml -f docker-compose.iso.yml -f docker-compose.ha.yml down
+
+# Clear databases and service orchestrator
+sudo docker compose -f docker-compose.yml -f docker-compose.iso.yml -f docker-compose.ha.yml down -v
+```
+
 ## Rationale
 
 :bulb: **Why do we use sidecars?**  

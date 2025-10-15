@@ -1,0 +1,38 @@
+services:
+  db:
+    image: "docker.io/library/postgres:${POSTGRESQL_VERSION:-16}"
+    container_name: inmanta-db
+    pull_policy: always
+    environment:
+      POSTGRES_USER: inmanta
+      POSTGRES_PASSWORD: inmanta
+      POSTGRES_HOST_AUTH_METHOD: |
+        scram-sha-256
+        host replication all 0.0.0.0/0 md5
+      POSTGRES_INITDB_ARGS: "--auth-host=scram-sha-256"
+      POSTGRES_REPLICA_USER: replica
+      POSTGRES_REPLICA_PASSWORD: inmanta
+      POSTGRES_REPLICA_APPNAME: inmanta
+    entrypoint: "/postgres-entrypoint.sh"
+    command: postgres -c jit=off
+    volumes:
+      - ./ha-db-entrypoint.sh:/postgres-entrypoint.sh
+      - inmanta-db-data:/var/lib/postgresql/data
+  db-replica:
+    image: "docker.io/library/postgres:${POSTGRESQL_VERSION:-16}"
+    container_name: inmanta-db-replica
+    pull_policy: always
+    user: postgres
+    environment:
+      PGHOST: db
+      PGUSER: replica
+      PGPASSWORD: inmanta
+      PGAPPNAME: inmanta
+    entrypoint: "/postgres-entrypoint.sh"
+    command: postgres -c jit=off
+    volumes:
+      - ./ha-db-replica-entrypoint.sh:/postgres-entrypoint.sh
+      - inmanta-db-replica-data:/var/lib/postgresql/data
+
+volumes:
+  inmanta-db-replica-data: {}
