@@ -45,6 +45,7 @@ sudo docker compose
     [-f docker-compose.init.yml] # Deploy a temporary sidecar, which can run a test case of a module to initialize the orchestrator
     [-f docker-compose.code.yml] # Deploy a code server sidecar, which allows to modify the orchestrator environment files from a web browser
     [-f docker-compose.db-dump.yml] # Deploy a db-dump sidecar, periodically dumping the full db into a file
+    [-f docker-compose.ha.yml] # Deploy a db replica, simulating a ha database setup
     <up|down|ps> [options...]
 ```
 
