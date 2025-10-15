@@ -200,16 +200,16 @@ sudo docker compose -f docker-compose.yml -f docker-compose.code.yml down -v
 echo "INMANTA_ORCHESTRATOR_IMAGE=..." >> .env
 
 # Start databases and service orchestrator
-sudo docker compose -f docker-compose.yml -f docker-compose.iso.yml -f docker-compose.db-replica.yml up -d
+sudo docker compose -f docker-compose.yml -f docker-compose.iso.yml -f docker-compose.ha.yml up -d
 
 # Check the containers status
-sudo docker compose -f docker-compose.yml -f docker-compose.iso.yml -f docker-compose.db-replica.yml ps -a
+sudo docker compose -f docker-compose.yml -f docker-compose.iso.yml -f docker-compose.ha.yml ps -a
 
 # Stop databases and service orchestrator
-sudo docker compose -f docker-compose.yml -f docker-compose.iso.yml -f docker-compose.db-replica.yml down
+sudo docker compose -f docker-compose.yml -f docker-compose.iso.yml -f docker-compose.ha.yml down
 
 # Clear databases and service orchestrator
-sudo docker compose -f docker-compose.yml -f docker-compose.iso.yml -f docker-compose.db-replica.yml down -v
+sudo docker compose -f docker-compose.yml -f docker-compose.iso.yml -f docker-compose.ha.yml down -v
 ```
 
 ## Rationale
