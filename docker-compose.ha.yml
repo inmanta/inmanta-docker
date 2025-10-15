@@ -23,7 +23,6 @@ services:
     container_name: inmanta-db-replica
     pull_policy: always
     user: postgres
-    restart: always
     environment:
       PGHOST: db
       PGUSER: replica
