@@ -7,6 +7,10 @@ This repo contains some example of docker based orchestrator deployments.  We il
 - [Deploy the service orchestrator](#deploy-the-service-orchestrator)
 - [Deploy the orchestrator with ssh access](#deploy-the-orchestrator-with-an-ssh-sidecar)
 - [Deploy the orchestrator with log rotation](#deploy-the-orchestrator-with-a-logrotate-sidecar)
+- [Deploy the service orchestrator with an init sidecar](#deploy-the-service-orchestrator-with-an-init-sidecar)
+- [Deploy the orchestrator with a code-server sidecar](#deploy-the-orchestrator-with-a-code-server-sidecar)
+- [Deploy the orchestrator with periodic db dumps](#deploy-the-orchestrator-with-periodic-db-dumps)
+- [Deploy the service orchestrator with a database replication](#deploy-the-service-orchestrator-with-a-database-replication)
 
 ## Configuration
 
@@ -40,6 +44,8 @@ sudo docker compose
     [-f docker-compose.logrotate.yml]  # Deploy a logrotate sidecar to rotate the logs of the orchestrator
     [-f docker-compose.init.yml] # Deploy a temporary sidecar, which can run a test case of a module to initialize the orchestrator
     [-f docker-compose.code.yml] # Deploy a code server sidecar, which allows to modify the orchestrator environment files from a web browser
+    [-f docker-compose.db-dump.yml] # Deploy a db-dump sidecar, periodically dumping the full db into a file
+    [-f docker-compose.ha.yml] # Deploy a db replica, simulating a ha database setup
     <up|down|ps> [options...]
 ```
 
@@ -170,7 +176,7 @@ sudo docker compose -f docker-compose.yml -f docker-compose.iso.yml -f docker-co
 sudo docker compose -f docker-compose.yml -f docker-compose.iso.yml -f docker-compose.init.yml down -v
 ```
 
-### Deploy the service orchestrator with a code-server sidecar
+### Deploy the orchestrator with a code-server sidecar
 
 :bulb: When developing a model, it can be convenient to work on the model that is present in the orchestrator environment, while relying on the inmanta vscode extension.  This sidecar allows you to deploy a code-server on the side of the orchestrator to simplify such development scenario.
 
@@ -189,6 +195,27 @@ sudo docker compose -f docker-compose.yml -f docker-compose.code.yml down
 # Clear storage of db, service orchestrator and code-server sidecar
 sudo docker compose -f docker-compose.yml -f docker-compose.code.yml down -v
 ```
+
+### Deploy the orchestrator with periodic db dumps
+
+:bulb: This sidecar will run a cron daemon, which will create a full database dump once a day.  The database dump is created in a folder named db-dumps in the current working directory.
+
+```bash
+echo "INMANTA_ORCHESTRATOR_IMAGE=..." >> .env
+
+# Start db, orchestrator and periodic db dumps sidecar
+sudo docker compose -f docker-compose.yml -f docker-compose.db-dump.yml up -d
+
+# Check the containers status
+sudo docker compose -f docker-compose.yml -f docker-compose.db-dump.yml ps -a
+
+# Stop db, orchestrator and periodic db dumps sidecar
+sudo docker compose -f docker-compose.yml -f docker-compose.db-dump.yml down
+
+# Clear storage of db, orchestrator and periodic db dumps sidecar
+sudo docker compose -f docker-compose.yml -f docker-compose.db-dump.yml down -v
+```
+
 
 ### Deploy the service orchestrator with a database replication
 
