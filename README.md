@@ -200,26 +200,16 @@ sudo docker compose -f docker-compose.yml -f docker-compose.code.yml down -v
 echo "INMANTA_ORCHESTRATOR_IMAGE=..." >> .env
 
 # Start databases and service orchestrator
-sudo docker compose -f docker-compose.yml -f docker-compose.iso.yml -f docker-compose.db-replica-init.yml up -d
-
-# Check the containers status
-sudo docker compose -f docker-compose.yml -f docker-compose.code.yml -f docker-compose.db-replica-init.yml ps -a
-
-# Once the database has been initialized (the server is shown as healthy), we stop the db and its replica, then start it again with synchronous_standby_names enabled.  This makes sure that any change committed to the main db, is saved in both the main db and the replica.
-# Stop databases and service orchestrator
-sudo docker compose -f docker-compose.yml -f docker-compose.code.yml -f docker-compose.db-replica-init.yml down
-
-# Start databases and service orchestrator
 sudo docker compose -f docker-compose.yml -f docker-compose.iso.yml -f docker-compose.db-replica.yml up -d
 
 # Check the containers status
-sudo docker compose -f docker-compose.yml -f docker-compose.code.yml -f docker-compose.db-replica.yml ps -a
+sudo docker compose -f docker-compose.yml -f docker-compose.iso.yml -f docker-compose.db-replica.yml ps -a
 
 # Stop databases and service orchestrator
-sudo docker compose -f docker-compose.yml -f docker-compose.code.yml -f docker-compose.db-replica.yml down
+sudo docker compose -f docker-compose.yml -f docker-compose.iso.yml -f docker-compose.db-replica.yml down
 
 # Clear databases and service orchestrator
-sudo docker compose -f docker-compose.yml -f docker-compose.code.yml -f docker-compose.db-replica.yml down -v
+sudo docker compose -f docker-compose.yml -f docker-compose.iso.yml -f docker-compose.db-replica.yml down -v
 ```
 
 ## Rationale
