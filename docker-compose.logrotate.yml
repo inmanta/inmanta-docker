@@ -1,6 +1,6 @@
 services:
   logrotate:
-    image: "${INMANTA_ORCHESTRATOR_LOGROTATE_IMAGE:-containers.inmanta.com/containers/service-orchestrator-logrotate:9}"
+    image: "${INMANTA_ORCHESTRATOR_LOGROTATE_IMAGE:-ghcr.io/inmanta/orchestrator-logrotate:latest}"
     container_name: inmanta-logrotate-sidecar
     build:
       context: .
