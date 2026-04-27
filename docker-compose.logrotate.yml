@@ -1,18 +1,14 @@
 services:
   logrotate:
-    image: "${INMANTA_ORCHESTRATOR_IMAGE:?error}"
+    image: "${INMANTA_ORCHESTRATOR_LOGROTATE_IMAGE:-containers.inmanta.com/containers/service-orchestrator-logrotate:9}"
     container_name: inmanta-logrotate-sidecar
-    pull_policy: always
-    entrypoint: ["/usr/bin/tini", "--", "/logrotate-entrypoint.sh"]
-    user: "root:root"
-    healthcheck:
-      test: ["CMD-SHELL", "if [ -f /var/lib/logrotate/status ]; then grep inmanta /var/lib/logrotate/status; else which logrotate; fi"]
-      interval: 5m
-      retries: 5
-      start_period: 30s
-      timeout: 10s
+    build:
+      context: .
+      dockerfile: logrotate.Dockerfile
+      args:
+        INMANTA_ORCHESTRATOR_IMAGE: "${INMANTA_ORCHESTRATOR_IMAGE:?error}"
+    pull_policy: build
     volumes:
-      - ./logrotate-entrypoint.sh:/logrotate-entrypoint.sh
       - inmanta-server-logs:/var/log/inmanta
       - inmanta-logrotate-data:/var/lib/logrotate
 
