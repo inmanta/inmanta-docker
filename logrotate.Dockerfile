@@ -38,7 +38,7 @@ VOLUME  ["/var/log/inmanta", "/var/lib/logrotate/"]
 
 # Verify the logrotate status
 HEALTHCHECK --interval=5m --timeout=10s --start-period=30s --retries=5 \
-    CMD "if [ -f /var/lib/logrotate/status ]; then grep inmanta /var/lib/logrotate/status; else which logrotate; fi"
+    CMD ["bash", "-c", "if [ -f /var/lib/logrotate/status ]; then grep inmanta /var/lib/logrotate/status; else which logrotate; fi"]
 
 # Entrypoint is cron, which will be executing logrotate at regular interval
 ENTRYPOINT ["/usr/bin/tini", "--", "/usr/sbin/cron"]
