@@ -7,7 +7,7 @@ LABEL com.inmanta.description="Logrotate container for ${INMANTA_ORCHESTRATOR_IM
 # Setup and entrypoint must run as root
 USER root:root
 
-RUN --mount=type=bind,target=/logrotate_build_dir <<BUILD_EOF
+RUN <<BUILD_EOF
 set -x
 set -e
 
