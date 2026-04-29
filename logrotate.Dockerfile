@@ -41,5 +41,5 @@ HEALTHCHECK --interval=5m --timeout=10s --start-period=30s --retries=5 \
     CMD ["bash", "-c", "if [ -f /var/lib/logrotate/status ]; then grep inmanta /var/lib/logrotate/status; else which logrotate; fi"]
 
 # Entrypoint is cron, which will be executing logrotate at regular interval
-ENTRYPOINT ["/usr/bin/tini", "--", "/usr/sbin/cron"]
-CMD ["-f"]
+ENTRYPOINT ["/usr/bin/tini", "--"]
+CMD ["/usr/sbin/cron", "-f"]
