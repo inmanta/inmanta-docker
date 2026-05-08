@@ -38,9 +38,13 @@ handlers:
     stream: ext://sys.stdout
   lsm_callback_handler:
     # LSM callback log
-    class: logging.FileHandler
+    class: logging.handlers.TimedRotatingFileHandler
     filename: /var/log/inmanta/callback.log
     formatter: lsm_callback_formatter
+    level: INFO
+    when: d
+    interval: 1
+    backupCount: 10
   core_tornado_debug_log_handler:
     # Special handler that captures tornado max_clients limit reached messages and turns them into warnings
     # As these may cause instability
