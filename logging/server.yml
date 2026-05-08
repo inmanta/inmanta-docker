@@ -24,16 +24,10 @@ formatters:
 handlers:
   server_handler:
     # Main handler for the server
-    class: logging.handlers.WatchedFileHandler
+    class: logging.handlers.TimedRotatingFileHandler
     filename: /var/log/inmanta/server.log
     formatter: core_log_formatter
     level: INFO
-    mode: a+
-  server_rotation_handler:
-    # Special handler to do rotation on the server logs
-    # The filename must match the filename used in the server_handler
-    class: logging.handlers.TimedRotatingFileHandler
-    filename: /var/log/inmanta/server.log
     when: d
     interval: 1
     backupCount: 10
@@ -72,7 +66,6 @@ loggers:
 root:
   handlers:
   - server_handler
-  - server_rotation_handler
   - core_console_handler
   level: INFO
 version: 1

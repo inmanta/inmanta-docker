@@ -19,25 +19,18 @@ handlers:
     class: inmanta.logging.TornadoDebugLogHandler
     level: DEBUG
   scheduler_handler:
-    class: logging.handlers.WatchedFileHandler
+    class: logging.handlers.TimedRotatingFileHandler
     filename: /var/log/inmanta/agent-{environment}.log
     formatter: core_log_formatter
     level: INFO
-    mode: a+
-  scheduler_rotation_handler:
-    class: logging.handlers.TimedRotatingFileHandler
-    filename: /var/log/inmanta/agent-{environment}.log
     when: d
     interval: 1
     backupCount: 10
   scheduler_resource_action_handler:
-    class: logging.handlers.WatchedFileHandler
+    class: logging.handlers.TimedRotatingFileHandler
     filename: /var/log/inmanta/resource-actions-{environment}.log
     formatter: core_log_formatter
     level: DEBUG
-  scheduler_resource_action_rotation_handler:
-    class: logging.handlers.TimedRotatingFileHandler
-    filename: /var/log/inmanta/resource-actions-{environment}.log
     when: d
     interval: 1
     backupCount: 10
@@ -48,7 +41,6 @@ loggers:
   inmanta.resource_action:
     handlers:
     - scheduler_resource_action_handler
-    - scheduler_resource_action_rotation_handler
     level: DEBUG
     propagate: true
   sqlalchemy.engine:
@@ -62,6 +54,5 @@ loggers:
 root:
   handlers:
   - scheduler_handler
-  - scheduler_rotation_handler
   level: INFO
 version: 1
