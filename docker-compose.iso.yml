@@ -7,7 +7,10 @@ services:
       INMANTA_DATABASE_PASSWORD: inmanta
       INMANTA_LICENSE_ENTITLEMENT_FILE: "/etc/inmanta/license/example.com.jwe"
       INMANTA_LICENSE_LICENSE_KEY: "/etc/inmanta/license/example.com.license"
+      INMANTA_LOGGING_SCHEDULER: /etc/inmanta/logging/scheduler.yml.tmpl
+      INMANTA_LOGGING_SERVER: /etc/inmanta/logging/server.yml
     volumes:
       - ./license:/etc/inmanta/license
+      - ./logging:/etc/inmanta/logging
       - inmanta-server-data:/var/lib/inmanta
       - inmanta-server-logs:/var/log/inmanta

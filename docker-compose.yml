@@ -20,9 +20,12 @@ services:
       INMANTA_DATABASE_HOST: inmanta-db
       INMANTA_DATABASE_USERNAME: inmanta
       INMANTA_DATABASE_PASSWORD: inmanta
+      INMANTA_LOGGING_SCHEDULER: /etc/inmanta/logging/scheduler.yml.tmpl
+      INMANTA_LOGGING_SERVER: /etc/inmanta/logging/server.yml
     volumes:
       - inmanta-server-data:/var/lib/inmanta
       - inmanta-server-logs:/var/log/inmanta
+      - ./logging:/etc/inmanta/logging
 
 volumes:
   inmanta-db-data: {}
