@@ -1,18 +1,15 @@
 #!/usr/bin/env bash
-# Alternative entrypoint for the inmanta orchestrator container.
-# Instead of starting the orchestrator, it clones a module and runs one of its
-# test case.  This test case is expected to use pytest-inmanta-lsm to initialize
-# the orchestrator.
+# Entrypoint of the init container, built with init.Dockerfile.
+# It runs one of the test cases of the module installed in the image.  This test
+# case is expected to use pytest-inmanta-lsm to initialize the orchestrator.
 
 set -x
 set -e
 set -o allexport
 
 ## INPUTS ##
-# Load the input parameters, specifying which module to load and the test to
-# run in order to initialize the orchestrator
-INMANTA_MODULE_REPO_URL="${INMANTA_MODULE_REPO_URL}"
-INMANTA_MODULE_REPO_BRANCH="${INMANTA_MODULE_REPO_BRANCH}"
+# Load the input parameters, specifying the test to run in order to initialize
+# the orchestrator
 INMANTA_PYTEST_ARGUMENTS="${INMANTA_PYTEST_ARGUMENTS}"
 
 ## SETUP ##
@@ -32,26 +29,10 @@ fi
 touch $INMANTA_PROFILE
 grep -e "$LOAD_ENV_CMD" "$INMANTA_PROFILE" || echo "$LOAD_ENV_CMD" >> "$INMANTA_PROFILE"
 
-# Make sure the module source is cloned on the host
-[ -d /tmp/module ] || git clone -b "${INMANTA_MODULE_REPO_BRANCH}" "${INMANTA_MODULE_REPO_URL}" /tmp/module
-cd /tmp/module
-git checkout master && git pull
-
-# Install sudo in the container
-apt-get update
-apt-get install -y sudo
-
-# Create a virtual environment to install the module and its dependencies
-[ -d venv ] || /opt/inmanta/bin/python -m venv venv
-
-# Install the module and its dependencies
-touch requirements.dev.txt requirements.txt
-venv/bin/pip install -e /tmp/module -c requirements.txt -r requirements.dev.txt
-
-# Use pytest-inmanta-lsm, installed in the venv, to initialize the orchestrator
+# Use pytest-inmanta-lsm, installed in the venv of the image, to initialize the orchestrator
 export INMANTA_LSM_CONTAINER_ENV="true"
 export INMANTA_LSM_NO_HALT="true"
 export INMANTA_LSM_NO_CLEAN="true"
 export INMANTA_LSM_REMOTE_SHELL="sudo -i -u"
 export INMANTA_LSM_REMOTE_HOST="inmanta"
-exec venv/bin/pytest $INMANTA_PYTEST_ARGUMENTS
+exec pytest $INMANTA_PYTEST_ARGUMENTS

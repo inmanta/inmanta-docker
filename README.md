@@ -29,8 +29,11 @@ The examples of orchestrator setup using docker referenced below can be configur
 | `INMANTA_AUTHORIZED_KEYS` | / | `docker-compose.ssh.yml` | The public keys to insert into the ssh sidecar authorized keys for the inmanta user. |
 | `INMANTA_SSH_SIDECAR_IP` | `127.0.0.1` | `docker-compose.ssh.yml` | This environment variable specifies on which ip of the **host** the ssh sidecar should be made available. |
 | `INMANTA_SSH_SIDECAR_PORT` | `2222` | `docker-compose.ssh.yml` | This environment variable specifies on which port of the **host** the ssh sidecar should be made available. |
-| `INMANTA_MODULE_REPO_URL` | / | `docker-compose.init.yml` | This environment variable specifies the url of the git repo containing the init test case. |
+| `INMANTA_MODULE_REPO_URL` | / | `docker-compose.init.yml` | This environment variable specifies the url of the git repo containing the init test case.  Required unless `INMANTA_MODULE_SOURCE` is set. |
 | `INMANTA_MODULE_REPO_BRANCH` | `master` | `docker-compose.init.yml` | This environment variable specifies the branch of the git repo containing the init test case. |
+| `INMANTA_MODULE_SOURCE` | `${INMANTA_MODULE_REPO_URL}#${INMANTA_MODULE_REPO_BRANCH}` | `docker-compose.init.yml` | This environment variable specifies the source of the module containing the init test case, as a docker build context: a git url (`<url>#<branch>`) or a local directory (i.e. the module you are working on). |
+| `UV_DEFAULT_INDEX` | `https://pypi.org/simple` | `docker-compose.init.yml` | This environment variable specifies the python package index used to install the module and its dependencies in the init sidecar. |
+| `UV_PRERELEASE` | `if-necessary-or-explicit` | `docker-compose.init.yml` | This environment variable specifies whether pre-release versions can be installed in the init sidecar (i.e. `allow`), see [uv documentation](https://docs.astral.sh/uv/reference/environment/#uv_prerelease). |
 | `INMANTA_PYTEST_ARGUMENTS` | `tests` | `docker-compose.init.yml` | This environment variable specifies the arguments to give to pytest when running the initialization tests. |
 | `INMANTA_CODE_SERVER_IP` | `127.0.0.1` | `docker-compose.code.yml` | This environment variable specifies on which ip of the **host** the code server sidecar should be made available. |
 | `INMANTA_CODE_SERVER_PORT` | `8080` | `docker-compose.code.yml` | This environment variable specifies on which port of the **host** the code server sidecar should be made available. |
@@ -140,10 +143,14 @@ sudo docker compose -f docker-compose.yml -f docker-compose.ssh.yml down -v
 
 :bulb: When developing a module, it is not uncommon to have a test case based on [pytest-inmanta-lsm](https://github.com/inmanta/pytest-inmanta-lsm) which resets an environment of a running orchestrator and deploys the model of the module, containing the service definition defined in the module.  Such test case can easily be used to initialize an orchestrator with the given project, for **development purposes**.
 
+The init sidecar image is built on top of the orchestrator image, with the module and its python dependencies installed (using [uv](https://docs.astral.sh/uv/)).  The image is built again on each `up`, but the dependencies are only installed again when the module source changes.
+
 ```bash
 echo "INMANTA_ORCHESTRATOR_IMAGE=..." >> .env
 echo "INMANTA_MODULE_REPO_URL=..." >> .env
 echo "INMANTA_MODULE_REPO_BRANCH=..." >> .env
+# Or, to use a local copy of the module instead of a git repo
+echo "INMANTA_MODULE_SOURCE=..." >> .env
 echo "INMANTA_PYTEST_ARGUMENTS=..." >> .env
 
 # Start db, service orchestrator and init sidecar
