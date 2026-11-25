@@ -1,0 +1,9 @@
+# Only the docs routing: inmanta-docker is not a Python package
+
+[tool.inmanta-sphinx.docs]
+# where the docs of this repo go in the product documentation
+[[tool.inmanta-sphinx.docs.pages]]
+path = "README.md"
+type = "howto"
+group = "install"
+title = "Run the orchestrator with Docker Compose"
